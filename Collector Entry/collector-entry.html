@@ -3,9 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Collector Entry + Exact Cash Denomination (Final) - with Notes</title>
+<title>Collector Entry + Exact Cash Denomination (Editable Cash)</title>
 <style>
-  /* --- Global / Collector styles --- */
   body {font-family: 'Segoe UI', Arial, sans-serif; background: #e0f7fa; margin: 0; padding: 10px;}
   h1 {text-align: center; color: #00796b; margin-bottom: 10px;}
   .table-container {overflow-x: auto; margin-bottom: 12px;}
@@ -21,8 +20,6 @@
   #summarySection h2 {color: #003e36; font-size: 1.1em; margin-bottom: 10px;}
   .toggle-btn {display:block; margin:15px auto; background:#00695c; color:#fff; padding:8px 16px; border:none; border-radius:4px; cursor:pointer; font-weight:600;}
   .toggle-btn:hover {background:#004d40;}
-
-  /* --- Cash Denomination exact layout (copied from supplied file) --- */
   .wrap{
     max-width: 930px;
     margin: 0 auto 18px;
@@ -59,23 +56,13 @@
   button.btn-denom{padding:8px 12px;border:none;background:#0b3954;color:white;font-weight:700;border-radius:4px;cursor:pointer;}
   button.btn-denom.secondary{background:#3c6e71;}
   footer.note{padding:8px 12px;text-align:center;font-size:13px;color:#333;border-top:1px dashed #eee;margin-top:8px;}
-
-  /* --- NEW: Notes panel styles --- */
-  .notes-toggle-wrap{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-  .notes-panel{background:#fffbea;border:1px solid #ffe29a;padding:10px;border-radius:6px;margin-top:8px;box-shadow:0 1px 4px rgba(0,0,0,0.03);}
-  .notes-panel h3{margin:0 0 6px 0;color:#5a3b00;font-size:14px}
-  .notes-panel textarea{width:100%;min-height:90px;box-sizing:border-box;padding:8px;border-radius:4px;border:1px solid #e6d9a7;font-family:inherit;resize:vertical}
-  .notes-btn{padding:6px 10px;border-radius:4px;border:none;background:#f0ad4e;color:#fff;cursor:pointer;font-weight:700}
-  .notes-btn:hover{opacity:0.95}
-
   @media (max-width: 880px){.container{flex-direction:column;}.left, .right{width:100%}.grand .amount{font-size:34px}}
 </style>
 </head>
 <body>
 
-<h1>Collector Detail Entry (with Talpatti Summary)</h1>
+<h1>Collector Detail Entry (Editable Cash)</h1>
 
-<!-- COLLECTOR TABLE (all names exactly as given) -->
 <div class="table-container">
 <table id="collectorTable">
   <thead>
@@ -84,90 +71,54 @@
     </tr>
   </thead>
   <tbody id="collectorBody">
-    <tr><td>Anita Dahal</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0" readonly></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-
-    <tr><td>Bimala Khatri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0" readonly></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-
-    <tr><td>Durga Neupane</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0" readonly></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-
-    <tr><td>Gita Khatri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0" readonly></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-
-    <tr><td>Manju Puri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0" readonly></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-
-    <tr><td>Sushila Parajuli</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0" readonly></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-
-    <tr><td>Bank Deposits</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0" readonly></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Anita Dahal</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Bimala Khatri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Durga Neupane Kadka</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Gita Khatri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Manju Puri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Sushila Parajuli</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Bank Deposits</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
   </tbody>
 </table>
 </div>
 
-<!-- control buttons -->
 <button class="btn" onclick="saveData()">Save Approved</button>
 <button class="btn" onclick="resetAll()">Reset All</button>
 <button class="btn" onclick="toggleAutoSave()">Auto Save: <span id='autoStatus'>OFF</span></button>
 
-<!-- COLLAPSIBLE TOGGLE (denom hidden by default) -->
 <button class="toggle-btn" id="toggleDenomBtn" onclick="toggleDenom()">💵 Show Cash Denomination</button>
 
-<!-- DENOMINATION SECTION (hidden by default) -->
 <div class="wrap" id="denominationSection" style="display:none;">
   <div class="topbar">
     <div class="title">Cash Denomination Calculator</div>
     <div style="font-weight:700;color:#083b4c">Total Amount</div>
   </div>
-
   <div class="container">
     <div class="left">
-      <!-- NEW: Notes toggle and panel on LEFT side -->
-      <div class="notes-toggle-wrap">
-        <button class="notes-btn" id="notesToggleBtn" onclick="toggleNotes()">Notes To Remember ▾</button>
-        <div style="flex:1;text-align:right;font-size:13px;color:#0b3a3f;">(Click to expand/collapse)</div>
-      </div>
-
-      <div id="notesPanel" class="notes-panel" style="display:none;">
-        <h3>Notes To Remember</h3>
-        <textarea id="notesTextarea" placeholder="Type notes here...">Double-check coin counts before saving. Keep receipt with member details.</textarea>
-        <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end;">
-          <button class="btn-denom secondary" id="saveNotesBtn">Save Notes</button>
-          <button class="btn-denom" id="clearNotesBtn">Clear</button>
-        </div>
-      </div>
-
       <table class="denom" aria-label="Denomination table">
-        <thead>
-          <tr><th>Denomination</th><th style="width:24%;">Count</th><th style="width:32%;text-align:right;">Amount</th></tr>
-        </thead>
+        <thead><tr><th>Denomination</th><th style="width:24%;">Count</th><th style="width:32%;text-align:right;">Amount</th></tr></thead>
         <tbody id="tbody-denom"></tbody>
       </table>
-
       <div style="display:flex;justify-content:space-between;margin-top:10px;align-items:center;">
         <div style="font-weight:700;color:#114b53">Depositor Details</div>
         <div style="font-weight:800;font-size:20px;color:#062f40" id="rightTotalSmall">0</div>
       </div>
     </div>
-
     <div class="right">
       <div class="grand">
         <div class="label">Total Amount</div>
         <div class="amount" id="grandTotal">0</div>
       </div>
-
       <div class="depositor">
-        <label>Member ID</label>
-        <input id="memberId" value="3361">
-        <label>Account No</label>
-        <input id="accNo" value="30030001528">
-        <label>Mobile No</label>
-        <input id="mobileNo" value="980437073">
+        <label>Member ID</label><input id="memberId" value="3361">
+        <label>Account No</label><input id="accNo" value="30030001528">
+        <label>Mobile No</label><input id="mobileNo" value="9804370723">
       </div>
-
       <div class="small-panel">
         <div style="display:flex;justify-content:space-between"><strong>Depositor</strong><strong id="depTotal">0</strong></div>
         <div style="margin-top:6px;font-size:13px;color:#0b3a3f">You can edit counts on left to update totals automatically.</div>
       </div>
-
       <div class="in-words" id="amountWords">Rupees Zero Only</div>
-
       <div class="controls">
         <button class="btn-denom" id="btnResetDenom">Reset</button>
         <button class="btn-denom secondary" id="btnPrintDenom">Print</button>
@@ -175,10 +126,9 @@
       </div>
     </div>
   </div>
-  <footer class="note">Designed exactly as your provided denomination layout. Grand Total syncs to all collector CASH fields.</footer>
+  <footer class="note">Grand Total syncs to all collector CASH fields.</footer>
 </div>
 
-<!-- SUMMARY -->
 <div id="summarySection">
   <h2>📋 Talpatti Summary (All Entries)</h2>
   <div class="table-container">
@@ -190,341 +140,150 @@
 </div>
 
 <script>
-/* --------------------------
-   Helper / Persistence keys
-   -------------------------- */
-const STORAGE_COLLECTOR_KEY = 'collectorData_v_final';
-const STORAGE_DENOM_KEY = 'denominationData_v_final';
-const STORAGE_AUTOSAVE = 'autoSaveEnabled_v_final';
-const STORAGE_NOTES_KEY = 'denominationNotes_v_final'; // new
-
-/* --------------------------
-   Collector logic (unchanged)
-   -------------------------- */
-let autoSaveEnabled = false;
-
-function parseNum(v){ return isNaN(+v) ? 0 : +v; }
-
+const STORAGE_COLLECTOR_KEY='collectorData_v_final';
+const STORAGE_DENOM_KEY='denominationData_v_final';
+const STORAGE_AUTOSAVE='autoSaveEnabled_v_final';
+let autoSaveEnabled=false;
+function parseNum(v){return isNaN(+v)?0:+v;}
 function updateRow(row){
-  const s = parseNum(row.querySelector('.saving').value);
-  const l = parseNum(row.querySelector('.loan').value);
-  const total = s + l;
-  row.querySelector('.total').textContent = total.toFixed(2);
-
-  const n = parseNum(row.querySelector('.ncbl').value);
-  const e = parseNum(row.querySelector('.esewa').value);
-  const c = parseNum(row.querySelector('.cash').value);
-  const k = parseNum(row.querySelector('.khata').value);
-
-  const rec = n + e + c + k;
-  row.querySelector('.totalReceived').textContent = rec.toFixed(2);
-
-  const diff = total - rec;
-  // small tolerance for floating math
-  row.querySelector('.difference').textContent = diff.toFixed(2);
-  row.querySelector('.status').textContent = Math.abs(diff) < 0.005 ? 'Approved' : 'Pending';
-
+  const s=parseNum(row.querySelector('.saving').value);
+  const l=parseNum(row.querySelector('.loan').value);
+  const total=s+l;row.querySelector('.total').textContent=total.toFixed(2);
+  const n=parseNum(row.querySelector('.ncbl').value);
+  const e=parseNum(row.querySelector('.esewa').value);
+  const c=parseNum(row.querySelector('.cash').value);
+  const k=parseNum(row.querySelector('.khata').value);
+  const rec=n+e+c+k;
+  row.querySelector('.totalReceived').textContent=rec.toFixed(2);
+  const diff=total-rec;
+  row.querySelector('.difference').textContent=diff.toFixed(2);
+  row.querySelector('.status').textContent=Math.abs(diff)<0.005?'Approved':'Pending';
   renderSummary();
-  if(autoSaveEnabled) saveData();
+  if(autoSaveEnabled)saveData();
 }
-
 function attachCollectorListeners(){
   document.querySelectorAll('#collectorTable input').forEach(inp=>{
-    inp.addEventListener('input', ()=>updateRow(inp.closest('tr')));
+    inp.addEventListener('input',()=>updateRow(inp.closest('tr')));
   });
 }
-
 function renderSummary(){
-  const body = document.getElementById('summaryBody');
-  body.innerHTML = '';
-  const rows = document.querySelectorAll('#collectorBody tr');
+  const body=document.getElementById('summaryBody');body.innerHTML='';
+  const rows=document.querySelectorAll('#collectorBody tr');
   rows.forEach((r,i)=>{
-    const name = r.cells[0].textContent;
-    const total = r.querySelector('.total').textContent;
-    const totalRec = r.querySelector('.totalReceived').textContent;
-    const diff = r.querySelector('.difference').textContent;
-    const status = r.querySelector('.status').textContent;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${i+1}</td><td>${name}</td><td>${total}</td><td>${totalRec}</td><td>${diff}</td><td>${status}</td>`;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${i+1}</td><td>${r.cells[0].textContent}</td><td>${r.querySelector('.total').textContent}</td><td>${r.querySelector('.totalReceived').textContent}</td><td>${r.querySelector('.difference').textContent}</td><td>${r.querySelector('.status').textContent}</td>`;
     body.appendChild(tr);
   });
 }
-
 function saveData(){
-  // Save collector rows
-  const collectors = [];
+  const collectors=[];
   document.querySelectorAll('#collectorBody tr').forEach(r=>{
     collectors.push({
-      name: r.cells[0].textContent,
-      saving: r.querySelector('.saving').value || 0,
-      loan: r.querySelector('.loan').value || 0,
-      ncbl: r.querySelector('.ncbl').value || 0,
-      esewa: r.querySelector('.esewa').value || 0,
-      cash: r.querySelector('.cash').value || 0,
-      khata: r.querySelector('.khata').value || 0,
-      total: r.querySelector('.total').textContent,
-      totalReceived: r.querySelector('.totalReceived').textContent,
-      difference: r.querySelector('.difference').textContent,
-      status: r.querySelector('.status').textContent
+      name:r.cells[0].textContent,
+      saving:r.querySelector('.saving').value||0,
+      loan:r.querySelector('.loan').value||0,
+      ncbl:r.querySelector('.ncbl').value||0,
+      esewa:r.querySelector('.esewa').value||0,
+      cash:r.querySelector('.cash').value||0,
+      khata:r.querySelector('.khata').value||0,
+      total:r.querySelector('.total').textContent,
+      totalReceived:r.querySelector('.totalReceived').textContent,
+      difference:r.querySelector('.difference').textContent,
+      status:r.querySelector('.status').textContent
     });
   });
-  localStorage.setItem(STORAGE_COLLECTOR_KEY, JSON.stringify(collectors));
-
-  // Save denomination counts too
-  const denomCounts = {};
+  localStorage.setItem(STORAGE_COLLECTOR_KEY,JSON.stringify(collectors));
+  const denomCounts={};
   document.querySelectorAll('.count').forEach(inp=>{
-    denomCounts[inp.dataset.denom] = parseInt(inp.value || 0, 10);
+    denomCounts[inp.dataset.denom]=parseInt(inp.value||0,10);
   });
-  localStorage.setItem(STORAGE_DENOM_KEY, JSON.stringify(denomCounts));
-
-  // Save notes content
-  const notes = document.getElementById('notesTextarea') ? document.getElementById('notesTextarea').value : '';
-  localStorage.setItem(STORAGE_NOTES_KEY, notes);
-
-  // autosave flag
-  localStorage.setItem(STORAGE_AUTOSAVE, autoSaveEnabled ? 'true' : 'false');
-
-  try{ console.log('Saved to localStorage.'); } catch(e){}
+  localStorage.setItem(STORAGE_DENOM_KEY,JSON.stringify(denomCounts));
 }
-
 function resetAll(){
-  if(!confirm('Reset all data?')) return;
-  localStorage.removeItem(STORAGE_COLLECTOR_KEY);
-  localStorage.removeItem(STORAGE_DENOM_KEY);
-  localStorage.removeItem(STORAGE_AUTOSAVE);
-  localStorage.removeItem(STORAGE_NOTES_KEY);
-  // reset all inputs
-  document.querySelectorAll('input, textarea').forEach(i=>{
-    if(i.type === 'number' || i.classList.contains('saving') || i.classList.contains('loan') || i.classList.contains('ncbl') || i.classList.contains('esewa') || i.classList.contains('khata') || i.classList.contains('count') || i.id==='grandTotal'){
-      i.value = 0;
-    } else {
-      // keep depositor text inputs as original values; clear notes
-      if(i.id === 'notesTextarea') i.value = '';
-    }
+  if(!confirm('Reset all data?'))return;
+  localStorage.clear();
+  document.querySelectorAll('input').forEach(i=>{
+    if(i.classList.contains('saving')||i.classList.contains('loan')||i.classList.contains('ncbl')||i.classList.contains('esewa')||i.classList.contains('cash')||i.classList.contains('khata')||i.classList.contains('count'))i.value=0;
   });
-  // clear computed fields
   document.querySelectorAll('.total,.totalReceived,.difference').forEach(e=>e.textContent='0');
   document.querySelectorAll('.status').forEach(e=>e.textContent='Pending');
-  // recompute denom display & sync
-  recomputeAllDenoms();
-  renderSummary();
+  recomputeAllDenoms();renderSummary();
 }
-
 function toggleAutoSave(){
-  autoSaveEnabled = !autoSaveEnabled;
-  document.getElementById('autoStatus').textContent = autoSaveEnabled ? 'ON' : 'OFF';
-  localStorage.setItem(STORAGE_AUTOSAVE, autoSaveEnabled ? 'true' : 'false');
+  autoSaveEnabled=!autoSaveEnabled;
+  document.getElementById('autoStatus').textContent=autoSaveEnabled?'ON':'OFF';
+  localStorage.setItem(STORAGE_AUTOSAVE,autoSaveEnabled?'true':'false');
 }
-
-/* --------------------------
-   Denomination logic (exact)
-   -------------------------- */
-const DENOMS = [1000,500,100,50,20,10,5];
-const tbodyDenom = document.getElementById('tbody-denom');
-
+const DENOMS=[1000,500,100,50,20,10,5];
+const tbodyDenom=document.getElementById('tbody-denom');
 function buildDenomRows(){
-  tbodyDenom.innerHTML = '';
+  tbodyDenom.innerHTML='';
   for(const d of DENOMS){
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td class="denom-label">${d} X</td>
-      <td class="count-cell"><input type="number" min="0" step="1" class="count" data-denom="${d}" value="0"></td>
-      <td class="row-total" id="amt-${d}">0</td>
-    `;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="denom-label">${d} X</td><td class="count-cell"><input type="number" min="0" step="1" class="count" data-denom="${d}" value="0"></td><td class="row-total" id="amt-${d}">0</td>`;
     tbodyDenom.appendChild(tr);
   }
 }
 buildDenomRows();
-
 function recomputeAllDenoms(){
-  let grand = 0;
+  let grand=0;
   document.querySelectorAll('.count').forEach(inp=>{
-    const denom = parseInt(inp.dataset.denom, 10);
-    const cnt = Math.max(0, parseInt(inp.value || 0, 10));
-    const amt = denom * cnt;
-    const el = document.getElementById('amt-' + denom);
-    if(el) el.textContent = amt.toLocaleString('en-IN');
-    grand += amt;
+    const denom=parseInt(inp.dataset.denom,10);
+    const cnt=Math.max(0,parseInt(inp.value||0,10));
+    const amt=denom*cnt;
+    const el=document.getElementById('amt-'+denom);
+    if(el)el.textContent=amt.toLocaleString('en-IN');
+    grand+=amt;
   });
-
-  // update UI boxes in denom panel
-  document.getElementById('grandTotal').textContent = grand.toLocaleString('en-IN');
-  document.getElementById('depTotal').textContent = grand.toLocaleString('en-IN');
-  document.getElementById('rightTotalSmall').textContent = grand.toLocaleString('en-IN');
-  document.getElementById('amountWords').textContent = numberToWordsIndian(grand);
-
-  // SYNC: update CASH field for ALL collectors simultaneously
-  document.querySelectorAll('#collectorBody tr').forEach(row=>{
-    const cashInput = row.querySelector('.cash');
-    if(cashInput){
-      cashInput.value = grand.toFixed(2);
-      // update each row's computed totals/differences
-      updateRow(row);
-    }
-  });
-  // optionally auto-save denom counts too
-  if(autoSaveEnabled) saveData();
+  document.getElementById('grandTotal').textContent=grand.toLocaleString('en-IN');
+  document.getElementById('depTotal').textContent=grand.toLocaleString('en-IN');
+  document.getElementById('rightTotalSmall').textContent=grand.toLocaleString('en-IN');
+  document.getElementById('amountWords').textContent=numberToWordsIndian(grand);
+  document.querySelectorAll('#collectorBody tr').forEach(row=>{updateRow(row);});
+  if(autoSaveEnabled)saveData();
 }
-
-/* number to words (Indian numbering) */
 function numberToWordsIndian(num){
-  num = Math.floor(num);
-  if(num === 0) return 'Rupees Zero Only';
-  const units = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten",
-                 "Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
-  const tens = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
-  function two(n){ if(n < 20) return units[n]; const t = Math.floor(n/10); const u = n%10; return tens[t] + (u ? " " + units[u] : ""); }
-  function three(n){ const h = Math.floor(n/100); const rem = n%100; let s = ""; if(h) s += units[h] + " Hundred"; if(rem){ if(s) s += " "; s += two(rem);} return s; }
-  let crore = Math.floor(num / 10000000); num %= 10000000;
-  let lakh = Math.floor(num / 100000); num %= 100000;
-  let thousand = Math.floor(num / 1000); num %= 1000;
-  const rest = num;
-  const parts = [];
-  if(crore) parts.push(three(crore) + " Crore");
-  if(lakh) parts.push(three(lakh) + " Lakh");
-  if(thousand) parts.push(three(thousand) + " Thousand");
-  if(rest) parts.push(three(rest));
-  return "Rupees " + parts.join(" ") + " Only";
+  num=Math.floor(num);if(num===0)return'Rupees Zero Only';
+  const u=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+  const t=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+  function two(n){if(n<20)return u[n];const T=Math.floor(n/10);const U=n%10;return t[T]+(U?" "+u[U]:"");}
+  function three(n){const h=Math.floor(n/100);const r=n%100;let s="";if(h)s+=u[h]+" Hundred";if(r){if(s)s+=" ";s+=two(r);}return s;}
+  let c=Math.floor(num/10000000);num%=10000000;let l=Math.floor(num/100000);num%=100000;let th=Math.floor(num/1000);num%=1000;const r=num;
+  const p=[];if(c)p.push(three(c)+" Crore");if(l)p.push(three(l)+" Lakh");if(th)p.push(three(th)+" Thousand");if(r)p.push(three(r));
+  return"Rupees "+p.join(" ")+" Only";
 }
-
-/* denom handlers: attach event delegation */
-document.addEventListener('input', function(e){
-  if(e.target && e.target.classList && e.target.classList.contains('count')){
-    recomputeAllDenoms();
-  }
+document.addEventListener('input',e=>{if(e.target.classList.contains('count'))recomputeAllDenoms();});
+document.getElementById('btnResetDenom').addEventListener('click',()=>{if(!confirm('Reset all counts?'))return;document.querySelectorAll('.count').forEach(i=>i.value=0);recomputeAllDenoms();});
+document.getElementById('btnPrintDenom').addEventListener('click',()=>window.print());
+document.getElementById('btnCSVDenom').addEventListener('click',()=>{
+  const rows=[['Denomination','Count','Amount']];
+  document.querySelectorAll('.count').forEach(i=>{const d=i.dataset.denom;const c=parseInt(i.value||0,10);rows.push([d,c,d*c]);});
+  rows.push(['Grand Total','',document.getElementById('grandTotal').textContent]);
+  const csv=rows.map(r=>r.map(cell=>`"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='denominations.csv';a.click();URL.revokeObjectURL(url);
 });
-
-/* Denom reset/print/csv */
-document.getElementById('btnResetDenom').addEventListener('click', ()=>{
-  if(!confirm('Reset all counts?')) return;
-  document.querySelectorAll('.count').forEach(i=>i.value = 0);
-  recomputeAllDenoms();
-});
-document.getElementById('btnPrintDenom').addEventListener('click', ()=> window.print());
-document.getElementById('btnCSVDenom').addEventListener('click', ()=>{
-  const rows = [['Denomination','Count','Amount']];
-  document.querySelectorAll('.count').forEach(i=>{
-    const d = i.dataset.denom;
-    const c = parseInt(i.value || 0, 10);
-    rows.push([d, c, d*c]);
-  });
-  rows.push(['Grand Total', '', document.getElementById('grandTotal').textContent]);
-  const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'denominations.csv'; a.click(); URL.revokeObjectURL(url);
-});
-
-/* --------------------------
-   Notes panel handlers
-   -------------------------- */
-function toggleNotes(){
-  const p = document.getElementById('notesPanel');
-  const btn = document.getElementById('notesToggleBtn');
-  if(!p) return;
-  if(p.style.display === 'block'){
-    p.style.display = 'none';
-    btn.textContent = 'Notes To Remember ▾';
-  } else {
-    p.style.display = 'block';
-    btn.textContent = 'Notes To Remember ▴';
-  }
-}
-
-// Save/clear notes buttons
-document.addEventListener('click', function(e){
-  if(e.target && e.target.id === 'saveNotesBtn'){
-    const notes = document.getElementById('notesTextarea').value;
-    localStorage.setItem(STORAGE_NOTES_KEY, notes);
-    alert('Notes saved.');
-  }
-  if(e.target && e.target.id === 'clearNotesBtn'){
-    if(!confirm('Clear notes?')) return;
-    document.getElementById('notesTextarea').value = '';
-    localStorage.removeItem(STORAGE_NOTES_KEY);
-  }
-});
-
-/* --------------------------
-   Collapsible denom panel
-   -------------------------- */
 function toggleDenom(){
-  const sec = document.getElementById('denominationSection');
-  const btn = document.getElementById('toggleDenomBtn');
-  if(!sec) return;
-  if(sec.style.display === 'block'){
-    sec.style.display = 'none';
-    btn.textContent = '💵 Show Cash Denomination';
-  } else {
-    sec.style.display = 'block';
-    btn.textContent = '💵 Hide Cash Denomination';
-  }
+  const sec=document.getElementById('denominationSection');
+  const btn=document.getElementById('toggleDenomBtn');
+  if(sec.style.display==='block'){sec.style.display='none';btn.textContent='💵 Show Cash Denomination';}
+  else{sec.style.display='block';btn.textContent='💵 Hide Cash Denomination';}
 }
-
-/* --------------------------
-   Initialization: load saved state (collectors + denom + notes)
-   -------------------------- */
 function initFromStorage(){
-  // collectors
   try{
-    const saved = JSON.parse(localStorage.getItem(STORAGE_COLLECTOR_KEY) || '[]');
-    if(saved && saved.length){
-      const rows = document.querySelectorAll('#collectorBody tr');
-      saved.forEach((d,i)=>{
-        if(rows[i]){
-          rows[i].querySelector('.saving').value = d.saving || 0;
-          rows[i].querySelector('.loan').value = d.loan || 0;
-          rows[i].querySelector('.ncbl').value = d.ncbl || 0;
-          rows[i].querySelector('.esewa').value = d.esewa || 0;
-          rows[i].querySelector('.cash').value = d.cash || 0;
-          rows[i].querySelector('.khata').value = d.khata || 0;
-        }
-      });
+    const saved=JSON.parse(localStorage.getItem(STORAGE_COLLECTOR_KEY)||'[]');
+    if(saved.length){
+      const rows=document.querySelectorAll('#collectorBody tr');
+      saved.forEach((d,i)=>{if(rows[i]){rows[i].querySelector('.saving').value=d.saving||0;rows[i].querySelector('.loan').value=d.loan||0;rows[i].querySelector('.ncbl').value=d.ncbl||0;rows[i].querySelector('.esewa').value=d.esewa||0;rows[i].querySelector('.cash').value=d.cash||0;rows[i].querySelector('.khata').value=d.khata||0;}});
     }
-
-    // denominations
-    const savedDenom = JSON.parse(localStorage.getItem(STORAGE_DENOM_KEY) || '{}');
-    if(savedDenom && Object.keys(savedDenom).length){
-      document.querySelectorAll('.count').forEach(inp=>{
-        const d = inp.dataset.denom;
-        if(typeof savedDenom[d] !== 'undefined'){
-          inp.value = savedDenom[d];
-        }
-      });
-    }
-
-    // notes
-    const savedNotes = localStorage.getItem(STORAGE_NOTES_KEY) || '';
-    if(savedNotes && document.getElementById('notesTextarea')){
-      document.getElementById('notesTextarea').value = savedNotes;
-    }
-
-    // autosave
-    if(localStorage.getItem(STORAGE_AUTOSAVE) === 'true'){
-      autoSaveEnabled = true;
-      document.getElementById('autoStatus').textContent = 'ON';
-    }
-  }catch(e){
-    console.warn('Could not parse saved data', e);
-  }
-
-  // Recompute everything to reflect loaded values
-  recomputeAllDenoms(); // this will sync CASH and call updateRow on each row
-  // attach listeners for collector inputs AFTER values set
+    const savedDenom=JSON.parse(localStorage.getItem(STORAGE_DENOM_KEY)||'{}');
+    if(Object.keys(savedDenom).length){document.querySelectorAll('.count').forEach(inp=>{const d=inp.dataset.denom;if(savedDenom[d]!==undefined)inp.value=savedDenom[d];});}
+    if(localStorage.getItem(STORAGE_AUTOSAVE)==='true'){autoSaveEnabled=true;document.getElementById('autoStatus').textContent='ON';}
+  }catch(e){console.warn('Could not parse saved data',e);}
+  recomputeAllDenoms();
   attachCollectorListeners();
   renderSummary();
 }
-
-/* --------------------------
-   Init on load
-   -------------------------- */
-window.onload = function(){
-  attachCollectorListeners();
-  buildDenomRows(); // ensure rows exist
-  initFromStorage();
-};
-
+window.onload=function(){attachCollectorListeners();buildDenomRows();initFromStorage();};
 </script>
 </body>
 </html>
-
