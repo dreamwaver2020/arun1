@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Collector Entry + Exact Cash Denomination (Editable Cash) — Updated</title>
+<title>Collector Entry + Exact Cash Denomination (Manual Cash Entry)</title>
 <style>
   body {font-family: 'Segoe UI', Arial, sans-serif; background: #e0f7fa; margin: 0; padding: 10px;}
   h1 {text-align: center; color: #00796b; margin-bottom: 10px;}
@@ -18,8 +18,6 @@
   .btn:hover {background: #004d40;}
   #summarySection {background: white; padding: 10px; border-radius: 6px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);} 
   #summarySection h2 {color: #003e36; font-size: 1.1em; margin-bottom: 10px;}
-  .toggle-btn {display:block; margin:15px auto; background:#00695c; color:#fff; padding:8px 16px; border:none; border-radius:4px; cursor:pointer; font-weight:600;}
-  .toggle-btn:hover {background:#004d40;}
   .wrap{max-width: 930px;margin: 0 auto 18px;border: 3px solid #bfbfbf;background: linear-gradient(#f8fbff,#f1fbff);}
   .topbar{background: #cfcfcf;padding: 10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid #d9d9d9;}
   .title{font-weight:700;font-size:20px;color:#2b4a54;}
@@ -44,24 +42,18 @@
   button.btn-denom{padding:8px 12px;border:none;background:#0b3954;color:white;font-weight:700;border-radius:4px;cursor:pointer;}
   button.btn-denom.secondary{background:#3c6e71;}
   footer.note{padding:8px 12px;text-align:center;font-size:13px;color:#333;border-top:1px dashed #eee;margin-top:8px;}
-  /* Notes */
   .notes-wrap{margin-top:18px;background:#fff;padding:10px;border-radius:6px;border:1px solid #d6ebea;}
   .notes-header{display:flex;justify-content:space-between;align-items:center;}
   .notes-title{font-weight:800;color:#073b3b}
   .notes-body{margin-top:10px;display:none}
   .notes-body textarea{width:100%;min-height:120px;box-sizing:border-box;padding:8px;border:1px solid #d7e7e7;border-radius:6px;font-weight:700}
-  @media (max-width: 880px){.container{flex-direction:column;}.left, .right{width:100%}.grand .amount{font-size:34px}}
-  /* Print rules: ensure denom and notes expanded when printing */
-  @media print{
-    #toggleDenomBtn, #savePdfBtn, #toggleNotesBtn, .btn, .btn-denom, #btnCSVDenom {display:none!important}
-    #denominationSection{display:block!important}
-    .notes-body{display:block!important}
-  }
+  @media (max-width:880px){.container{flex-direction:column;}.left,.right{width:100%}.grand .amount{font-size:34px}}
+  @media print{#toggleDenomBtn,#savePdfBtn,#toggleNotesBtn,.btn,.btn-denom,#btnCSVDenom{display:none!important}#denominationSection{display:block!important}.notes-body{display:block!important}}
 </style>
 </head>
 <body>
 
-<h1>Collector Detail Entry (Editable Cash)</h1>
+<h1>Collector Detail Entry (Manual Cash Entry)</h1>
 
 <div class="table-container">
 <table id="collectorTable">
@@ -73,7 +65,8 @@
   <tbody id="collectorBody">
     <tr><td>Anita Dahal</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
     <tr><td>Bimala Khatri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-    <tr><td>Durga Neupane Kadka</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Durga Neupane Khadka</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Ganga Basnet Kathet</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
     <tr><td>Gita Khatri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
     <tr><td>Manju Puri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
     <tr><td>Sushila Parajuli</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
@@ -132,7 +125,7 @@
       </div>
     </div>
   </div>
-  <footer class="note">Grand Total syncs to all collector CASH fields.</footer>
+  <footer class="note">💡 Cash Denomination total is now separate (manual CASH entry in collector table).</footer>
 </div>
 
 <div id="summarySection">
@@ -145,7 +138,7 @@
   </div>
 </div>
 
-<!-- Notes for Me -->
+<!-- Notes Section -->
 <div class="notes-wrap">
   <div class="notes-header">
     <div class="notes-title">Notes for Me</div>
@@ -165,11 +158,14 @@ const STORAGE_DENOM_KEY='denominationData_v_final';
 const STORAGE_AUTOSAVE='autoSaveEnabled_v_final';
 const STORAGE_NOTES='collectorNotes_v_final';
 let autoSaveEnabled=false;
+
 function parseNum(v){return isNaN(+v)?0:+v;}
+
 function updateRow(row){
   const s=parseNum(row.querySelector('.saving').value);
   const l=parseNum(row.querySelector('.loan').value);
-  const total=s+l;row.querySelector('.total').textContent=total.toFixed(2);
+  const total=s+l;
+  row.querySelector('.total').textContent=total.toFixed(2);
   const n=parseNum(row.querySelector('.ncbl').value);
   const e=parseNum(row.querySelector('.esewa').value);
   const c=parseNum(row.querySelector('.cash').value);
@@ -182,13 +178,16 @@ function updateRow(row){
   renderSummary();
   if(autoSaveEnabled)saveData();
 }
+
 function attachCollectorListeners(){
   document.querySelectorAll('#collectorTable input').forEach(inp=>{
     inp.addEventListener('input',()=>updateRow(inp.closest('tr')));
   });
 }
+
 function renderSummary(){
-  const body=document.getElementById('summaryBody');body.innerHTML='';
+  const body=document.getElementById('summaryBody');
+  body.innerHTML='';
   const rows=document.querySelectorAll('#collectorBody tr');
   rows.forEach((r,i)=>{
     const tr=document.createElement('tr');
@@ -196,6 +195,7 @@ function renderSummary(){
     body.appendChild(tr);
   });
 }
+
 function saveData(){
   const collectors=[];
   document.querySelectorAll('#collectorBody tr').forEach(r=>{
@@ -220,6 +220,7 @@ function saveData(){
   });
   localStorage.setItem(STORAGE_DENOM_KEY,JSON.stringify(denomCounts));
 }
+
 function resetAll(){
   if(!confirm('Reset all data?'))return;
   document.querySelectorAll('input').forEach(i=>{
@@ -227,13 +228,16 @@ function resetAll(){
   });
   document.querySelectorAll('.total,.totalReceived,.difference').forEach(e=>e.textContent='0');
   document.querySelectorAll('.status').forEach(e=>e.textContent='Pending');
-  recomputeAllDenoms();renderSummary();
+  recomputeAllDenoms();
+  renderSummary();
 }
+
 function toggleAutoSave(){
   autoSaveEnabled=!autoSaveEnabled;
   document.getElementById('autoStatus').textContent=autoSaveEnabled?'ON':'OFF';
   localStorage.setItem(STORAGE_AUTOSAVE,autoSaveEnabled?'true':'false');
 }
+
 const DENOMS=[1000,500,100,50,20,10,5];
 const tbodyDenom=document.getElementById('tbody-denom');
 function buildDenomRows(){
@@ -245,6 +249,7 @@ function buildDenomRows(){
   }
 }
 buildDenomRows();
+
 function recomputeAllDenoms(){
   let grand=0;
   document.querySelectorAll('.count').forEach(inp=>{
@@ -259,12 +264,12 @@ function recomputeAllDenoms(){
   document.getElementById('depTotal').textContent=grand.toLocaleString('en-IN');
   document.getElementById('rightTotalSmall').textContent=grand.toLocaleString('en-IN');
   document.getElementById('amountWords').textContent=numberToWordsIndian(grand);
-  // sync grand total to all collector CASH fields
-  document.querySelectorAll('#collectorBody tr').forEach(row=>{row.querySelector('.cash').value=grand;updateRow(row);});
   if(autoSaveEnabled)saveData();
 }
+
 function numberToWordsIndian(num){
-  num=Math.floor(num);if(num===0)return'Rupees Zero Only';
+  num=Math.floor(num);
+  if(num===0)return'Rupees Zero Only';
   const u=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
   const t=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
   function two(n){if(n<20)return u[n];const T=Math.floor(n/10);const U=n%10;return t[T]+(U?" "+u[U]:"");}
@@ -284,6 +289,7 @@ document.getElementById('btnCSVDenom').addEventListener('click',()=>{
   const csv=rows.map(r=>r.map(cell=>`"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
   const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='denominations.csv';a.click();URL.revokeObjectURL(url);
 });
+
 function toggleDenom(){
   const sec=document.getElementById('denominationSection');
   const btn=document.getElementById('toggleDenomBtn');
@@ -291,43 +297,39 @@ function toggleDenom(){
   else{sec.style.display='block';btn.textContent='💵 Hide Cash Denomination';}
 }
 
-/* Notes handling */
 function toggleNotes(){
   const body=document.getElementById('notesBody');
   const btn=document.getElementById('toggleNotesBtn');
   if(body.style.display==='block'){body.style.display='none';btn.textContent='📝 Show Notes for Me';}
   else{body.style.display='block';btn.textContent='📝 Hide Notes for Me';}
 }
+
 function saveNotes(){
   const v=document.getElementById('myNotes').value||'';
   localStorage.setItem(STORAGE_NOTES, v);
   alert('Notes saved locally');
 }
+
 function clearNotes(){
   if(!confirm('Clear notes?'))return;
   document.getElementById('myNotes').value='';
   localStorage.removeItem(STORAGE_NOTES);
 }
 
-/* Save as PDF: temporarily expand denom & notes to include them in print, then restore */
 function saveAsPDF(){
   const denom=document.getElementById('denominationSection');
   const notes=document.getElementById('notesBody');
   const denomWasHidden=(denom.style.display!=='block');
   const notesWasHidden=(notes.style.display!=='block');
-  // expand both
   denom.style.display='block';
   notes.style.display='block';
-  // small delay to ensure layout updates
   setTimeout(()=>{
     window.print();
-    // restore
     if(denomWasHidden)denom.style.display='none';
     if(notesWasHidden)notes.style.display='none';
   },250);
 }
 
-/* Initialization & storage */
 function initFromStorage(){
   try{
     const saved=JSON.parse(localStorage.getItem(STORAGE_COLLECTOR_KEY)||'[]');
@@ -344,6 +346,7 @@ function initFromStorage(){
   attachCollectorListeners();
   renderSummary();
 }
+
 window.onload=function(){attachCollectorListeners();buildDenomRows();initFromStorage();};
 </script>
 </body>
