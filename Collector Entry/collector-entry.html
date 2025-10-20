@@ -1,587 +1,347 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ne">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Collector Entry — Full Updated</title>
+<title>Collector Entry + Exact Cash Denomination (Editable Cash) — Updated</title>
 <style>
-  :root{
-    --primary:#00796b;
-    --dark:#004d40;
-    --muted:#e8f6f3;
-    --ok-bg:#dff0e0;
-    --ok-text:#006400;
-    --bad-bg:#ffd6d6;
-    --bad-text:#990000;
-  }
-  body{font-family: "Segoe UI", Arial, sans-serif; background:var(--muted); margin:0; padding:14px;}
-  h1{text-align:center;color:var(--primary);margin-bottom:10px;}
-  .table-container{overflow-x:auto;margin-bottom:12px;}
-  table{width:100%;border-collapse:collapse;font-size:0.92em;}
-  th,td{border:1px solid #cfe9e3;padding:7px;text-align:center;vertical-align:middle;}
-  th{background:var(--dark);color:#fff;font-weight:700;}
-  input[type="number"], input[type="text"]{width:100px;padding:6px;border-radius:4px;border:1px solid #d7e7ea;text-align:right;}
-  .small{width:80px;}
-  .btn{padding:8px 14px;background:var(--primary);color:#fff;border:none;border-radius:6px;cursor:pointer;margin:4px;}
-  .btn:hover{background:#085e50;}
-  .btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;}
-  .toggle-row{display:flex;gap:10px;justify-content:center;margin:10px 0;}
-  .toggle-btn{background:#00695c;color:#fff;padding:8px 14px;border:none;border-radius:6px;cursor:pointer;font-weight:700;}
-  .wrap{max-width:1100px;margin:0 auto 14px;border:3px solid #bfcfc8;background:linear-gradient(#f8fbff,#f1fbff);border-radius:8px;}
-  .topbar{background:#cfcfcf;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #d9d9d9;border-radius:6px 6px 0 0;}
-  .title{font-weight:800;font-size:18px;color:#2b4a54;}
+  body {font-family: 'Segoe UI', Arial, sans-serif; background: #e0f7fa; margin: 0; padding: 10px;}
+  h1 {text-align: center; color: #00796b; margin-bottom: 10px;}
+  .table-container {overflow-x: auto; margin-bottom: 12px;}
+  table {width: 100%; border-collapse: collapse; font-size: 0.9em;}
+  th, td {border: 1px solid #b2dfdb; padding: 5px; text-align: center;}
+  th {background-color: #004d40; color: white;}
+  input {width: 80px; text-align: right;}
+  .green {background-color: #c8e6c9;}
+  .pink {background-color: #f8bbd0;}
+  .btn {padding: 8px 15px; background: #00796b; color: white; border: none; cursor: pointer; border-radius: 4px; margin: 5px 2px;}
+  .btn:hover {background: #004d40;}
+  #summarySection {background: white; padding: 10px; border-radius: 6px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);} 
+  #summarySection h2 {color: #003e36; font-size: 1.1em; margin-bottom: 10px;}
+  .toggle-btn {display:block; margin:15px auto; background:#00695c; color:#fff; padding:8px 16px; border:none; border-radius:4px; cursor:pointer; font-weight:600;}
+  .toggle-btn:hover {background:#004d40;}
+  .wrap{max-width: 930px;margin: 0 auto 18px;border: 3px solid #bfbfbf;background: linear-gradient(#f8fbff,#f1fbff);}
+  .topbar{background: #cfcfcf;padding: 10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid #d9d9d9;}
+  .title{font-weight:700;font-size:20px;color:#2b4a54;}
   .container{display:flex;gap:12px;padding:12px;}
-  .left{width:62%;background:#fff;padding:10px;border-radius:6px;}
-  .right{width:36%;padding:10px;background:linear-gradient(#eefcf3,#dff8ef);border-radius:6px;display:flex;flex-direction:column;gap:10px;align-items:stretch;}
-  .grand{background:#fff;border:2px solid #98e6b6;padding:12px;text-align:center;border-radius:6px;}
-  .grand .amount{font-size:36px;font-weight:900;color:#05394a;margin-top:6px;}
-  .inWords{margin-top:8px;font-weight:700;color:#153d2e;}
-  .denom table{width:100%;border-collapse:collapse;}
-  .denom th,.denom td{padding:8px;text-align:left;border:1px solid #d7e7ea;}
-  .notes{max-width:1100px;margin:12px auto;padding:10px;background:#fff;border-radius:6px;border:1px solid #dfeee0;}
-  #notesBox{width:100%;min-height:120px;padding:8px;border:1px solid #cfe8db;border-radius:6px;font-size:14px;resize:vertical;}
-  .status{display:inline-block;padding:6px 8px;border-radius:6px;font-weight:800;}
-  .status.approved{background:var(--ok-bg);color:var(--ok-text);}
-  .status.pending{background:var(--bad-bg);color:var(--bad-text);}
+  .left {width: 62%;background: #fff;padding: 10px;border-radius:4px;box-shadow: 0 1px 2px rgba(0,0,0,0.06);} 
+  table.denom{width:100%;border-collapse:collapse;table-layout:fixed;}
+  table.denom th, table.denom td{border:1px solid #bfcbd4;padding:8px 6px;text-align:left;vertical-align:middle;}
+  table.denom thead th{background: #d7e7ee;color: #052033;font-weight:700;text-align:left;padding:10px;}
+  .denom-label{width:18%;font-weight:700;color:#013a4a;}
+  .count-cell input{width:100%;box-sizing:border-box;padding:6px;text-align:right;font-weight:700;border:1px solid #c7d7df;border-radius:4px;background: #fafcff;}
+  .row-total{text-align:right;font-weight:800;color:#0b3954;font-size:14px;}
+  .right {width:36%;padding:8px;background: linear-gradient(#eefcf3,#dff8ef);border-radius:4px;box-shadow: 0 1px 2px rgba(0,0,0,0.04);display:flex;flex-direction:column;gap:8px;}
+  .grand {background:#fff;border:2px solid #98e6b6;padding:10px;text-align:center;border-radius:6px;}
+  .grand .label{font-size:14px;font-weight:700;color:#013a4a;}
+  .grand .amount{font-size:46px;font-weight:900;color:#05394a;margin-top:6px;letter-spacing:1px;}
+  .small-panel{background:#e9f7ef;padding:8px;border-radius:6px;border:1px solid #cde9d5;font-size:14px;}
+  .depositor{background:#fff;border:1px solid #cedeea;padding:8px;border-radius:6px;}
+  .depositor label{display:block;font-size:12px;color:#18424a;margin-top:6px;}
+  .depositor input{width:100%;padding:6px;box-sizing:border-box;font-weight:700;border:1px solid #d7e7ec;border-radius:4px;}
+  .in-words{margin-top:6px;background:#fff4f0;border-top:6px solid #d9534f;padding:10px;text-align:center;font-weight:700;color:#4a2c2c;border-radius:4px;font-size:15px;}
+  .controls{display:flex;gap:8px;margin-top:6px;}
+  button.btn-denom{padding:8px 12px;border:none;background:#0b3954;color:white;font-weight:700;border-radius:4px;cursor:pointer;}
+  button.btn-denom.secondary{background:#3c6e71;}
   footer.note{padding:8px 12px;text-align:center;font-size:13px;color:#333;border-top:1px dashed #eee;margin-top:8px;}
-  @media (max-width:900px){ .container{flex-direction:column}.left,.right{width:100%}.grand .amount{font-size:28px} }
-
-  /* Print CSS for A4 landscape */
+  /* Notes */
+  .notes-wrap{margin-top:18px;background:#fff;padding:10px;border-radius:6px;border:1px solid #d6ebea;}
+  .notes-header{display:flex;justify-content:space-between;align-items:center;}
+  .notes-title{font-weight:800;color:#073b3b}
+  .notes-body{margin-top:10px;display:none}
+  .notes-body textarea{width:100%;min-height:120px;box-sizing:border-box;padding:8px;border:1px solid #d7e7e7;border-radius:6px;font-weight:700}
+  @media (max-width: 880px){.container{flex-direction:column;}.left, .right{width:100%}.grand .amount{font-size:34px}}
+  /* Print rules: ensure denom and notes expanded when printing */
   @media print{
-    @page { size: A4 landscape; margin: 12mm; }
-    body {background:white;color:#000;}
-    .btn, .toggle-btn, .btn-row, .toggle-row { display:none !important; }
-    .wrap { box-shadow:none; border:none; }
+    #toggleDenomBtn, #savePdfBtn, #toggleNotesBtn, .btn, .btn-denom, #btnCSVDenom {display:none!important}
+    #denominationSection{display:block!important}
+    .notes-body{display:block!important}
   }
 </style>
 </head>
 <body>
 
-<h1>Collector Detail Entry — Full</h1>
+<h1>Collector Detail Entry (Editable Cash)</h1>
 
-<!-- Collector table -->
-<div class="table-container" aria-live="polite">
-  <table id="collectorTable" role="table">
-    <thead>
-      <tr>
-        <th>Particulars</th><th>Saving</th><th>Loans</th><th>Total</th><th>NCBL</th><th>ESEWA</th><th>CASH</th><th>KHATA</th><th>Total Received</th><th>Difference</th><th>Status</th>
-      </tr>
-    </thead>
-    <tbody id="collectorBody">
-      <!-- example rows -->
-      <tr>
-        <td>Anita Dahal</td>
-        <td><input class="saving" type="number" min="0" value="0"></td>
-        <td><input class="loan" type="number" min="0" value="0"></td>
-        <td class="total">0.00</td>
-        <td><input class="ncbl" type="number" min="0" value="0"></td>
-        <td><input class="esewa" type="number" min="0" value="0"></td>
-        <td><input class="cash" type="number" min="0" value="0"></td>
-        <td><input class="khata" type="number" min="0" value="0"></td>
-        <td class="totalReceived">0.00</td>
-        <td class="difference">0.00</td>
-        <td class="status pending">Pending</td>
-      </tr>
-      <tr>
-        <td>Bimala Khatri</td>
-        <td><input class="saving" type="number" min="0" value="0"></td>
-        <td><input class="loan" type="number" min="0" value="0"></td>
-        <td class="total">0.00</td>
-        <td><input class="ncbl" type="number" min="0" value="0"></td>
-        <td><input class="esewa" type="number" min="0" value="0"></td>
-        <td><input class="cash" type="number" min="0" value="0"></td>
-        <td><input class="khata" type="number" min="0" value="0"></td>
-        <td class="totalReceived">0.00</td>
-        <td class="difference">0.00</td>
-        <td class="status pending">Pending</td>
-      </tr>
-      <tr>
-        <td>Durga Neupane</td>
-        <td><input class="saving" type="number" min="0" value="0"></td>
-        <td><input class="loan" type="number" min="0" value="0"></td>
-        <td class="total">0.00</td>
-        <td><input class="ncbl" type="number" min="0" value="0"></td>
-        <td><input class="esewa" type="number" min="0" value="0"></td>
-        <td><input class="cash" type="number" min="0" value="0"></td>
-        <td><input class="khata" type="number" min="0" value="0"></td>
-        <td class="totalReceived">0.00</td>
-        <td class="difference">0.00</td>
-        <td class="status pending">Pending</td>
-      </tr>
-       <td>Ganga Basnet</td>
-        <td><input class="saving" type="number" min="0" value="0"></td>
-        <td><input class="loan" type="number" min="0" value="0"></td>
-        <td class="total">0.00</td>
-        <td><input class="ncbl" type="number" min="0" value="0"></td>
-        <td><input class="esewa" type="number" min="0" value="0"></td>
-        <td><input class="cash" type="number" min="0" value="0"></td>
-        <td><input class="khata" type="number" min="0" value="0"></td>
-        <td class="totalReceived">0.00</td>
-        <td class="difference">0.00</td>
-        <td class="status pending">Pending</td>
-      </tr>
-      <td>Gita Khatri</td>
-        <td><input class="saving" type="number" min="0" value="0"></td>
-        <td><input class="loan" type="number" min="0" value="0"></td>
-        <td class="total">0.00</td>
-        <td><input class="ncbl" type="number" min="0" value="0"></td>
-        <td><input class="esewa" type="number" min="0" value="0"></td>
-        <td><input class="cash" type="number" min="0" value="0"></td>
-        <td><input class="khata" type="number" min="0" value="0"></td>
-        <td class="totalReceived">0.00</td>
-        <td class="difference">0.00</td>
-        <td class="status pending">Pending</td>
-      </tr>
-      <td>Manju Puri</td>
-        <td><input class="saving" type="number" min="0" value="0"></td>
-        <td><input class="loan" type="number" min="0" value="0"></td>
-        <td class="total">0.00</td>
-        <td><input class="ncbl" type="number" min="0" value="0"></td>
-        <td><input class="esewa" type="number" min="0" value="0"></td>
-        <td><input class="cash" type="number" min="0" value="0"></td>
-        <td><input class="khata" type="number" min="0" value="0"></td>
-        <td class="totalReceived">0.00</td>
-        <td class="difference">0.00</td>
-        <td class="status pending">Pending</td>
-      </tr>
-      <td>Sushila Parajuli</td>
-        <td><input class="saving" type="number" min="0" value="0"></td>
-        <td><input class="loan" type="number" min="0" value="0"></td>
-        <td class="total">0.00</td>
-        <td><input class="ncbl" type="number" min="0" value="0"></td>
-        <td><input class="esewa" type="number" min="0" value="0"></td>
-        <td><input class="cash" type="number" min="0" value="0"></td>
-        <td><input class="khata" type="number" min="0" value="0"></td>
-        <td class="totalReceived">0.00</td>
-        <td class="difference">0.00</td>
-        <td class="status pending">Pending</td>
-      </tr>
-
-      <!-- add more rows as needed -->
-    </tbody>
-  </table>
+<div class="table-container">
+<table id="collectorTable">
+  <thead>
+    <tr>
+      <th>Particulars</th><th>Saving</th><th>Loans</th><th>Total</th><th>NCBL</th><th>ESEWA</th><th>CASH</th><th>KHATA</th><th>Total Received</th><th>Difference</th><th>Status</th>
+    </tr>
+  </thead>
+  <tbody id="collectorBody">
+    <tr><td>Anita Dahal</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Bimala Khatri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Durga Neupane Kadka</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Gita Khatri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Manju Puri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Sushila Parajuli</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+    <tr><td>Bank Deposits</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
+  </tbody>
+</table>
 </div>
 
-<!-- Buttons row -->
-<div class="btn-row" role="toolbar" aria-label="Actions">
-  <button class="btn" id="btnSaveApproved">Save Approved</button>
-  <button class="btn" id="btnResetAll">Reset All</button>
-  <button class="btn" id="btnToggleAuto">Auto Save: <span id="autoStatus">OFF</span></button>
-  <button class="btn" id="btnSavePDF">💾 Save PDF</button>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+  <button class="btn" onclick="saveData()">Save Approved</button>
+  <button class="btn" onclick="resetAll()">Reset All</button>
+  <button class="btn" onclick="toggleAutoSave()">Auto Save: <span id='autoStatus'>OFF</span></button>
+  <button class="btn" id="savePdfBtn" onclick="saveAsPDF()">Save as PDF</button>
+  <button class="btn" id="toggleDenomBtn" onclick="toggleDenom()">💵 Show Cash Denomination</button>
+  <button class="btn" id="toggleNotesBtn" onclick="toggleNotes()">📝 Show Notes for Me</button>
 </div>
 
-<!-- Toggle row: Denom and Notes side-by-side (notes below region) -->
-<div class="toggle-row">
-  <button class="toggle-btn" id="toggleDenomBtn">💵 Show Cash Denomination</button>
-  <button class="toggle-btn" id="toggleNotesBtn">📝 Show Notes for Me</button>
-</div>
-
-<!-- Denomination section (collapsible) -->
 <div class="wrap" id="denominationSection" style="display:none;">
   <div class="topbar">
     <div class="title">Cash Denomination Calculator</div>
     <div style="font-weight:700;color:#083b4c">Total Amount</div>
   </div>
-
   <div class="container">
-    <div class="left denom">
-      <table aria-label="Denomination table">
-        <thead><tr><th>Denomination</th><th>Count</th><th>Amount</th></tr></thead>
+    <div class="left">
+      <table class="denom" aria-label="Denomination table">
+        <thead><tr><th>Denomination</th><th style="width:24%;">Count</th><th style="width:32%;text-align:right;">Amount</th></tr></thead>
         <tbody id="tbody-denom"></tbody>
       </table>
-      <div style="margin-top:8px;display:flex;gap:8px;">
-        <button class="btn" id="btnResetDenom">Reset Denom</button>
-        <button class="btn" id="btnPrintDenom">Print Denom</button>
-        <button class="btn" id="btnCSVDenom">Export Denom CSV</button>
+      <div style="display:flex;justify-content:space-between;margin-top:10px;align-items:center;">
+        <div style="font-weight:700;color:#114b53">Depositor Details</div>
+        <div style="font-weight:800;font-size:20px;color:#062f40" id="rightTotalSmall">0</div>
       </div>
     </div>
-
     <div class="right">
       <div class="grand">
-        <div class="label">Grand Total</div>
+        <div class="label">Total Amount</div>
         <div class="amount" id="grandTotal">0</div>
-        <div class="inWords" id="amountWords">In Words: Zero Only</div>
       </div>
-      <div style="font-size:13px;color:#0b3a3f;">Denomination values do <strong>not</strong> change collectors' CASH column automatically.</div>
+      <div class="depositor">
+        <label>Member ID</label><input id="memberId" value="3361">
+        <label>Account No</label><input id="accNo" value="30030001528">
+        <label>Mobile No</label><input id="mobileNo" value="9804370723">
+      </div>
+      <div class="small-panel">
+        <div style="display:flex;justify-content:space-between"><strong>Depositor</strong><strong id="depTotal">0</strong></div>
+        <div style="margin-top:6px;font-size:13px;color:#0b3a3f">You can edit counts on left to update totals automatically.</div>
+      </div>
+      <div class="in-words" id="amountWords">Rupees Zero Only</div>
+      <div class="controls">
+        <button class="btn-denom" id="btnResetDenom">Reset</button>
+        <button class="btn-denom secondary" id="btnPrintDenom">Print</button>
+        <button class="btn-denom" id="btnCSVDenom">Export CSV</button>
+      </div>
     </div>
   </div>
-
-  <footer class="note">Denomination calculator is independent — use it for counting notes only.</footer>
+  <footer class="note">Grand Total syncs to all collector CASH fields.</footer>
 </div>
 
-<!-- Notes collapsible -->
-<div class="notes" id="notesSection" style="display:none;">
-  <h3 style="margin-top:0;color:#33691e;">Notes for Me</h3>
-  <textarea id="notesBox" placeholder="Write your notes here..."></textarea>
+<div id="summarySection">
+  <h2>📋 Talpatti Summary (All Entries)</h2>
+  <div class="table-container">
+    <table id="summaryTable">
+      <thead><tr><th>#</th><th>Particulars</th><th>Total</th><th>Total Received</th><th>Difference</th><th>Status</th></tr></thead>
+      <tbody id="summaryBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Notes for Me -->
+<div class="notes-wrap">
+  <div class="notes-header">
+    <div class="notes-title">Notes for Me</div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn" onclick="clearNotes()">Clear Notes</button>
+      <button class="btn" onclick="saveNotes()">Save Notes</button>
+    </div>
+  </div>
+  <div class="notes-body" id="notesBody">
+    <textarea id="myNotes" placeholder="यहाँ आफ्ना नोटहरू लेख्नुहोस्..."></textarea>
+  </div>
 </div>
 
 <script>
-/* ---------------------------
-   Storage keys & util
-   --------------------------- */
-const STORAGE_COLLECTOR_KEY = 'collector_full_v1';
-const STORAGE_DENOM_KEY = 'denom_full_v1';
-const STORAGE_AUTOSAVE_KEY = 'autosave_full_v1';
-const STORAGE_NOTES_KEY = 'notes_full_v1';
-
-function parseNum(v){ return isNaN(+v) ? 0 : +v; }
-function fmtIN(n){ return n.toLocaleString('en-IN'); }
-
-/* ---------------------------
-   Collector logic: update row, color statuses
-   --------------------------- */
+const STORAGE_COLLECTOR_KEY='collectorData_v_final';
+const STORAGE_DENOM_KEY='denominationData_v_final';
+const STORAGE_AUTOSAVE='autoSaveEnabled_v_final';
+const STORAGE_NOTES='collectorNotes_v_final';
+let autoSaveEnabled=false;
+function parseNum(v){return isNaN(+v)?0:+v;}
 function updateRow(row){
-  const s = parseNum(row.querySelector('.saving').value);
-  const l = parseNum(row.querySelector('.loan').value);
-  const total = s + l;
-  row.querySelector('.total').textContent = total.toFixed(2);
-
-  const n = parseNum(row.querySelector('.ncbl').value);
-  const e = parseNum(row.querySelector('.esewa').value);
-  const c = parseNum(row.querySelector('.cash').value); // note: cash is manual now
-  const k = parseNum(row.querySelector('.khata').value);
-  const rec = n + e + c + k;
-  row.querySelector('.totalReceived').textContent = rec.toFixed(2);
-
-  const diff = total - rec;
-  row.querySelector('.difference').textContent = diff.toFixed(2);
-
-  const statusCell = row.querySelector('.status');
-  const state = Math.abs(diff) < 0.005 ? 'Approved' : 'Pending';
-  statusCell.textContent = state;
-  // set classes for color
-  statusCell.classList.remove('approved','pending');
-  statusCell.classList.add(state === 'Approved' ? 'approved' : 'pending');
+  const s=parseNum(row.querySelector('.saving').value);
+  const l=parseNum(row.querySelector('.loan').value);
+  const total=s+l;row.querySelector('.total').textContent=total.toFixed(2);
+  const n=parseNum(row.querySelector('.ncbl').value);
+  const e=parseNum(row.querySelector('.esewa').value);
+  const c=parseNum(row.querySelector('.cash').value);
+  const k=parseNum(row.querySelector('.khata').value);
+  const rec=n+e+c+k;
+  row.querySelector('.totalReceived').textContent=rec.toFixed(2);
+  const diff=total-rec;
+  row.querySelector('.difference').textContent=diff.toFixed(2);
+  row.querySelector('.status').textContent=Math.abs(diff)<0.005?'Approved':'Pending';
+  renderSummary();
+  if(autoSaveEnabled)saveData();
 }
-
-/* Attach input listener for collector table (delegated) */
 function attachCollectorListeners(){
-  const tbody = document.getElementById('collectorBody');
-  tbody.addEventListener('input', (ev) => {
-    const t = ev.target;
-    if(t.matches('input')) {
-      const row = t.closest('tr');
-      if(row) updateRow(row);
-      if(autoSaveEnabled) saveData();
-    }
+  document.querySelectorAll('#collectorTable input').forEach(inp=>{
+    inp.addEventListener('input',()=>updateRow(inp.closest('tr')));
   });
 }
-
-/* ---------------------------
-   Denomination calculator (independent)
-   --------------------------- */
-const DENOMS = [1000,500,100,50,20,10,5];
-function buildDenomRows(){
-  const tbody = document.getElementById('tbody-denom');
-  tbody.innerHTML = '';
-  for(const d of DENOMS){
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${d}</td><td><input class="count" type="number" min="0" step="1" data-denom="${d}" value="0"></td><td id="amt-${d}">0</td>`;
-    tbody.appendChild(tr);
-  }
-}
-
-/* recompute denom totals — DO NOT sync to collector CASH */
-function recomputeDenoms(){
-  let grand = 0;
-  document.querySelectorAll('.count').forEach(inp => {
-    const denom = parseInt(inp.dataset.denom, 10);
-    const cnt = Math.max(0, parseInt(inp.value || 0, 10));
-    const amt = denom * cnt;
-    const el = document.getElementById('amt-' + denom);
-    if(el) el.textContent = fmtIN(amt);
-    grand += amt;
+function renderSummary(){
+  const body=document.getElementById('summaryBody');body.innerHTML='';
+  const rows=document.querySelectorAll('#collectorBody tr');
+  rows.forEach((r,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${i+1}</td><td>${r.cells[0].textContent}</td><td>${r.querySelector('.total').textContent}</td><td>${r.querySelector('.totalReceived').textContent}</td><td>${r.querySelector('.difference').textContent}</td><td>${r.querySelector('.status').textContent}</td>`;
+    body.appendChild(tr);
   });
-  document.getElementById('grandTotal').textContent = fmtIN(grand);
-  document.getElementById('amountWords').textContent = 'In Words: ' + numberToWordsIndian(grand) + ' Only';
-  if(autoSaveEnabled) saveData();
 }
-
-/* Number to words (Indian grouping) */
-function numberToWordsIndian(num){
-  num = Math.floor(num);
-  if(num === 0) return 'Zero';
-  const u = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
-  const t = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
-  function two(n){ if(n<20) return u[n]; const T=Math.floor(n/10); const U=n%10; return t[T] + (U ? " " + u[U] : ""); }
-  function three(n){ const h = Math.floor(n/100); const r = n%100; let s=""; if(h) s += u[h] + " Hundred"; if(r){ if(s) s += " "; s += two(r); } return s; }
-  let crore = Math.floor(num/10000000); num = num%10000000;
-  let lakh = Math.floor(num/100000); num = num%100000;
-  let thousand = Math.floor(num/1000); num = num%1000; const rem = num;
-  const parts = [];
-  if(crore) parts.push(three(crore) + " Crore");
-  if(lakh) parts.push(three(lakh) + " Lakh");
-  if(thousand) parts.push(three(thousand) + " Thousand");
-  if(rem) parts.push(three(rem));
-  return parts.join(" ");
-}
-
-/* ---------------------------
-   Save / Load / Reset
-   --------------------------- */
-let autoSaveEnabled = false;
-
 function saveData(){
-  // collectors
-  const collectors = [];
+  const collectors=[];
   document.querySelectorAll('#collectorBody tr').forEach(r=>{
     collectors.push({
-      name: r.cells[0].textContent,
-      saving: r.querySelector('.saving').value || 0,
-      loan: r.querySelector('.loan').value || 0,
-      ncbl: r.querySelector('.ncbl').value || 0,
-      esewa: r.querySelector('.esewa').value || 0,
-      cash: r.querySelector('.cash').value || 0,
-      khata: r.querySelector('.khata').value || 0,
-      total: r.querySelector('.total').textContent,
-      totalReceived: r.querySelector('.totalReceived').textContent,
-      difference: r.querySelector('.difference').textContent,
-      status: r.querySelector('.status').textContent
+      name:r.cells[0].textContent,
+      saving:r.querySelector('.saving').value||0,
+      loan:r.querySelector('.loan').value||0,
+      ncbl:r.querySelector('.ncbl').value||0,
+      esewa:r.querySelector('.esewa').value||0,
+      cash:r.querySelector('.cash').value||0,
+      khata:r.querySelector('.khata').value||0,
+      total:r.querySelector('.total').textContent,
+      totalReceived:r.querySelector('.totalReceived').textContent,
+      difference:r.querySelector('.difference').textContent,
+      status:r.querySelector('.status').textContent
     });
   });
-  localStorage.setItem(STORAGE_COLLECTOR_KEY, JSON.stringify(collectors));
-
-  // denom
-  const denom = {};
-  document.querySelectorAll('.count').forEach(i => denom[i.dataset.denom] = parseInt(i.value || 0, 10));
-  localStorage.setItem(STORAGE_DENOM_KEY, JSON.stringify(denom));
-
-  // notes saved separately (autosave also handles)
-  // autosave flag
-  localStorage.setItem(STORAGE_AUTOSAVE_KEY, autoSaveEnabled ? 'true' : 'false');
+  localStorage.setItem(STORAGE_COLLECTOR_KEY,JSON.stringify(collectors));
+  const denomCounts={};
+  document.querySelectorAll('.count').forEach(inp=>{
+    denomCounts[inp.dataset.denom]=parseInt(inp.value||0,10);
+  });
+  localStorage.setItem(STORAGE_DENOM_KEY,JSON.stringify(denomCounts));
 }
-
-function loadData(){
-  // collectors
-  try{
-    const saved = JSON.parse(localStorage.getItem(STORAGE_COLLECTOR_KEY) || '[]');
-    if(saved && saved.length){
-      const rows = document.querySelectorAll('#collectorBody tr');
-      saved.forEach((d,i)=>{
-        if(rows[i]){
-          rows[i].querySelector('.saving').value = d.saving || 0;
-          rows[i].querySelector('.loan').value = d.loan || 0;
-          rows[i].querySelector('.ncbl').value = d.ncbl || 0;
-          rows[i].querySelector('.esewa').value = d.esewa || 0;
-          rows[i].querySelector('.cash').value = d.cash || 0;
-          rows[i].querySelector('.khata').value = d.khata || 0;
-        }
-      });
-    }
-  }catch(e){ console.warn('collector load failed', e); }
-
-  // denom
-  try{
-    const savedDenom = JSON.parse(localStorage.getItem(STORAGE_DENOM_KEY) || '{}');
-    if(savedDenom && Object.keys(savedDenom).length){
-      document.querySelectorAll('.count').forEach(inp => {
-        const d = inp.dataset.denom;
-        if(savedDenom[d] !== undefined) inp.value = savedDenom[d];
-      });
-    }
-  }catch(e){ console.warn('denom load failed', e); }
-
-  // notes
-  const notesEl = document.getElementById('notesBox');
-  if(notesEl){
-    const s = localStorage.getItem(STORAGE_NOTES_KEY) || '';
-    notesEl.value = s;
-  }
-
-  // autosave flag
-  if(localStorage.getItem(STORAGE_AUTOSAVE_KEY) === 'true'){
-    autoSaveEnabled = true;
-    document.getElementById('autoStatus').textContent = 'ON';
-  } else {
-    autoSaveEnabled = false;
-    document.getElementById('autoStatus').textContent = 'OFF';
-  }
-
-  // recompute visuals
-  document.querySelectorAll('#collectorBody tr').forEach(r => updateRow(r));
-  recomputeDenoms();
-}
-
-/* Reset but preserve notes */
 function resetAll(){
-  if(!confirm('Reset all collector & denom data? Notes will be preserved.')) return;
-  const savedNotes = localStorage.getItem(STORAGE_NOTES_KEY);
-  localStorage.removeItem(STORAGE_COLLECTOR_KEY);
-  localStorage.removeItem(STORAGE_DENOM_KEY);
-  localStorage.removeItem(STORAGE_AUTOSAVE_KEY);
-
-  // reset collectors inputs
-  document.querySelectorAll('#collectorBody tr').forEach(r=>{
-    r.querySelectorAll('input').forEach(inp=>{
-      if(inp.classList.contains('saving')||inp.classList.contains('loan')||inp.classList.contains('ncbl')||inp.classList.contains('esewa')||inp.classList.contains('cash')||inp.classList.contains('khata')){
-        inp.value = 0;
-      }
-    });
-    updateRow(r);
+  if(!confirm('Reset all data?'))return;
+  document.querySelectorAll('input').forEach(i=>{
+    if(i.classList.contains('saving')||i.classList.contains('loan')||i.classList.contains('ncbl')||i.classList.contains('esewa')||i.classList.contains('cash')||i.classList.contains('khata')||i.classList.contains('count'))i.value=0;
   });
-
-  // reset denom counts
-  document.querySelectorAll('.count').forEach(i => i.value = 0);
-  recomputeDenoms();
-
-  // restore notes if any
-  if(savedNotes) localStorage.setItem(STORAGE_NOTES_KEY, savedNotes);
-  autoSaveEnabled = false;
-  document.getElementById('autoStatus').textContent = 'OFF';
+  document.querySelectorAll('.total,.totalReceived,.difference').forEach(e=>e.textContent='0');
+  document.querySelectorAll('.status').forEach(e=>e.textContent='Pending');
+  recomputeAllDenoms();renderSummary();
 }
-
-/* ---------------------------
-   Denom CSV / Print
-   --------------------------- */
-function exportDenomCSV(){
-  const rows = [['Denomination','Count','Amount']];
-  let grand = 0;
-  document.querySelectorAll('.count').forEach(i=>{
-    const d = parseInt(i.dataset.denom,10);
-    const c = parseInt(i.value || 0, 10);
-    rows.push([d, c, d*c]);
-    grand += d*c;
-  });
-  rows.push(['Grand Total','',grand]);
-  const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'denominations.csv'; a.click(); URL.revokeObjectURL(url);
+function toggleAutoSave(){
+  autoSaveEnabled=!autoSaveEnabled;
+  document.getElementById('autoStatus').textContent=autoSaveEnabled?'ON':'OFF';
+  localStorage.setItem(STORAGE_AUTOSAVE,autoSaveEnabled?'true':'false');
 }
-
-function printDenom(){
-  const denomEl = document.getElementById('denominationSection');
-  if(!denomEl) return alert('Denomination section not found.');
-  const html = `
-    <html><head><title>Denominations</title>
-    <style>@page{size:A4 landscape;margin:12mm;}body{font-family:Arial,Helvetica,sans-serif;padding:10px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:6px;text-align:left}</style>
-    </head><body>${denomEl.innerHTML}</body></html>
-  `;
-  const w = window.open('', '_blank', 'width=1000,height=800');
-  if(w && w.document){
-    w.document.open(); w.document.write(html); w.document.close();
-    setTimeout(()=>{ w.focus(); w.print(); }, 500);
-  } else {
-    // iframe fallback
-    const iframe = document.createElement('iframe');
-    iframe.style.position='fixed'; iframe.style.right='0'; iframe.style.bottom='0'; iframe.style.width='0'; iframe.style.height='0'; iframe.style.border='0';
-    document.body.appendChild(iframe);
-    const iwin = iframe.contentWindow;
-    iwin.document.open(); iwin.document.write(html); iwin.document.close();
-    setTimeout(()=>{ iwin.focus(); iwin.print(); setTimeout(()=>document.body.removeChild(iframe),1000); }, 700);
+const DENOMS=[1000,500,100,50,20,10,5];
+const tbodyDenom=document.getElementById('tbody-denom');
+function buildDenomRows(){
+  tbodyDenom.innerHTML='';
+  for(const d of DENOMS){
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="denom-label">${d} X</td><td class="count-cell"><input type="number" min="0" step="1" class="count" data-denom="${d}" value="0"></td><td class="row-total" id="amt-${d}">0</td>`;
+    tbodyDenom.appendChild(tr);
   }
 }
-
-/* ---------------------------
-   Save as PDF (Print dialog A4 landscape)
-   --------------------------- */
-function openPrintDialogForFullPage(){
-  // Save data first
-  saveNotes();
-  saveData();
-
-  // Prepare content clone — keep current state and styles
-  const headHTML = document.head.innerHTML;
-  const bodyHTML = document.body.innerHTML;
-
-  const html = '<!doctype html><html>' + headHTML + '<body>' + bodyHTML + '</body></html>';
-
-  let w = null;
-  try { w = window.open('', '_blank', 'width=1200,height=900'); } catch(e) { w = null; }
-
-  if(w && w.document){
-    w.document.open();
-    w.document.write(html);
-    // hide controls in print via CSS included above; but also remove interactive handlers (buttons) visually removed by print CSS
-    w.document.close();
-    setTimeout(()=>{ try { w.focus(); w.print(); } catch(e) { alert('Print failed: '+e.message); } }, 700);
-  } else {
-    // fallback iframe print
-    const iframe = document.createElement('iframe');
-    iframe.style.position='fixed'; iframe.style.right='0'; iframe.style.bottom='0'; iframe.style.width='0'; iframe.style.height='0'; iframe.style.border='0';
-    document.body.appendChild(iframe);
-    const iwin = iframe.contentWindow;
-    iwin.document.open(); iwin.document.write(html); iwin.document.close();
-    setTimeout(()=>{ try{ iwin.focus(); iwin.print(); } catch(e){ alert('Print failed. Please allow popups or press Ctrl+P.'); } finally{ setTimeout(()=>document.body.removeChild(iframe),1200); } }, 900);
-  }
+buildDenomRows();
+function recomputeAllDenoms(){
+  let grand=0;
+  document.querySelectorAll('.count').forEach(inp=>{
+    const denom=parseInt(inp.dataset.denom,10);
+    const cnt=Math.max(0,parseInt(inp.value||0,10));
+    const amt=denom*cnt;
+    const el=document.getElementById('amt-'+denom);
+    if(el)el.textContent=amt.toLocaleString('en-IN');
+    grand+=amt;
+  });
+  document.getElementById('grandTotal').textContent=grand.toLocaleString('en-IN');
+  document.getElementById('depTotal').textContent=grand.toLocaleString('en-IN');
+  document.getElementById('rightTotalSmall').textContent=grand.toLocaleString('en-IN');
+  document.getElementById('amountWords').textContent=numberToWordsIndian(grand);
+  // sync grand total to all collector CASH fields
+  document.querySelectorAll('#collectorBody tr').forEach(row=>{row.querySelector('.cash').value=grand;updateRow(row);});
+  if(autoSaveEnabled)saveData();
+}
+function numberToWordsIndian(num){
+  num=Math.floor(num);if(num===0)return'Rupees Zero Only';
+  const u=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+  const t=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+  function two(n){if(n<20)return u[n];const T=Math.floor(n/10);const U=n%10;return t[T]+(U?" "+u[U]:"");}
+  function three(n){const h=Math.floor(n/100);const r=n%100;let s="";if(h)s+=u[h]+" Hundred";if(r){if(s)s+=" ";s+=two(r);}return s;}
+  let c=Math.floor(num/10000000);num%=10000000;let l=Math.floor(num/100000);num%=100000;let th=Math.floor(num/1000);num%=1000;const r=num;
+  const p=[];if(c)p.push(three(c)+" Crore");if(l)p.push(three(l)+" Lakh");if(th)p.push(three(th)+" Thousand");if(r)p.push(three(r));
+  return"Rupees "+p.join(" ")+" Only";
 }
 
-/* ---------------------------
-   Notes handling
-   --------------------------- */
-function saveNotes(){
-  const nb = document.getElementById('notesBox');
-  if(nb) localStorage.setItem(STORAGE_NOTES_KEY, nb.value);
-}
-
-/* ---------------------------
-   Wiring & init
-   --------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
-  // Build denom rows
-  buildDenomRows();
-
-  // attach denom listener (delegated)
-  document.getElementById('tbody-denom').addEventListener('input', (ev) => {
-    if(ev.target && ev.target.classList.contains('count')) recomputeDenoms();
-  });
-
-  // denom action buttons
-  document.getElementById('btnResetDenom').addEventListener('click', () => {
-    if(!confirm('Reset denomination counts?')) return;
-    document.querySelectorAll('.count').forEach(i => i.value = 0);
-    recomputeDenoms();
-  });
-  document.getElementById('btnCSVDenom').addEventListener('click', exportDenomCSV);
-  document.getElementById('btnPrintDenom').addEventListener('click', printDenom);
-
-  // toggles
-  document.getElementById('toggleDenomBtn').addEventListener('click', () => {
-    const el = document.getElementById('denominationSection');
-    const btn = document.getElementById('toggleDenomBtn');
-    if(el.style.display === 'block'){ el.style.display = 'none'; btn.textContent = '💵 Show Cash Denomination'; }
-    else { el.style.display = 'block'; btn.textContent = '💵 Hide Cash Denomination'; }
-  });
-
-  document.getElementById('toggleNotesBtn').addEventListener('click', () => {
-    const el = document.getElementById('notesSection');
-    const btn = document.getElementById('toggleNotesBtn');
-    if(el.style.display === 'block'){ el.style.display = 'none'; btn.textContent = '📝 Show Notes for Me'; }
-    else { el.style.display = 'block'; btn.textContent = '📝 Hide Notes for Me'; }
-  });
-
-  // notes auto-save
-  const nb = document.getElementById('notesBox');
-  if(nb){
-    nb.addEventListener('input', () => { localStorage.setItem(STORAGE_NOTES_KEY, nb.value); });
-  }
-
-  // buttons: Save / Reset / Auto / SavePDF
-  document.getElementById('btnSaveApproved').addEventListener('click', () => {
-    saveNotes(); saveData();
-    alert('Saved locally (Approved snapshot).');
-  });
-
-  document.getElementById('btnResetAll').addEventListener('click', () => { resetAll(); });
-
-  document.getElementById('btnToggleAuto').addEventListener('click', () => {
-    autoSaveEnabled = !autoSaveEnabled;
-    localStorage.setItem(STORAGE_AUTOSAVE_KEY, autoSaveEnabled ? 'true' : 'false');
-    document.getElementById('autoStatus').textContent = autoSaveEnabled ? 'ON' : 'OFF';
-    if(autoSaveEnabled) saveData();
-  });
-
-  document.getElementById('btnSavePDF').addEventListener('click', () => {
-    openPrintDialogForFullPage();
-  });
-
-  // collector inputs listener
-  attachCollectorListeners();
-
-  // restore data
-  loadData();
+document.addEventListener('input',e=>{if(e.target.classList.contains('count'))recomputeAllDenoms();});
+document.getElementById('btnResetDenom').addEventListener('click',()=>{if(!confirm('Reset all counts?'))return;document.querySelectorAll('.count').forEach(i=>i.value=0);recomputeAllDenoms();});
+document.getElementById('btnPrintDenom').addEventListener('click',()=>window.print());
+document.getElementById('btnCSVDenom').addEventListener('click',()=>{
+  const rows=[['Denomination','Count','Amount']];
+  document.querySelectorAll('.count').forEach(i=>{const d=i.dataset.denom;const c=parseInt(i.value||0,10);rows.push([d,c,d*c]);});
+  rows.push(['Grand Total','',document.getElementById('grandTotal').textContent]);
+  const csv=rows.map(r=>r.map(cell=>`"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='denominations.csv';a.click();URL.revokeObjectURL(url);
 });
-</script>
+function toggleDenom(){
+  const sec=document.getElementById('denominationSection');
+  const btn=document.getElementById('toggleDenomBtn');
+  if(sec.style.display==='block'){sec.style.display='none';btn.textContent='💵 Show Cash Denomination';}
+  else{sec.style.display='block';btn.textContent='💵 Hide Cash Denomination';}
+}
 
+/* Notes handling */
+function toggleNotes(){
+  const body=document.getElementById('notesBody');
+  const btn=document.getElementById('toggleNotesBtn');
+  if(body.style.display==='block'){body.style.display='none';btn.textContent='📝 Show Notes for Me';}
+  else{body.style.display='block';btn.textContent='📝 Hide Notes for Me';}
+}
+function saveNotes(){
+  const v=document.getElementById('myNotes').value||'';
+  localStorage.setItem(STORAGE_NOTES, v);
+  alert('Notes saved locally');
+}
+function clearNotes(){
+  if(!confirm('Clear notes?'))return;
+  document.getElementById('myNotes').value='';
+  localStorage.removeItem(STORAGE_NOTES);
+}
+
+/* Save as PDF: temporarily expand denom & notes to include them in print, then restore */
+function saveAsPDF(){
+  const denom=document.getElementById('denominationSection');
+  const notes=document.getElementById('notesBody');
+  const denomWasHidden=(denom.style.display!=='block');
+  const notesWasHidden=(notes.style.display!=='block');
+  // expand both
+  denom.style.display='block';
+  notes.style.display='block';
+  // small delay to ensure layout updates
+  setTimeout(()=>{
+    window.print();
+    // restore
+    if(denomWasHidden)denom.style.display='none';
+    if(notesWasHidden)notes.style.display='none';
+  },250);
+}
+
+/* Initialization & storage */
+function initFromStorage(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_COLLECTOR_KEY)||'[]');
+    if(saved.length){
+      const rows=document.querySelectorAll('#collectorBody tr');
+      saved.forEach((d,i)=>{if(rows[i]){rows[i].querySelector('.saving').value=d.saving||0;rows[i].querySelector('.loan').value=d.loan||0;rows[i].querySelector('.ncbl').value=d.ncbl||0;rows[i].querySelector('.esewa').value=d.esewa||0;rows[i].querySelector('.cash').value=d.cash||0;rows[i].querySelector('.khata').value=d.khata||0;}});
+    }
+    const savedDenom=JSON.parse(localStorage.getItem(STORAGE_DENOM_KEY)||'{}');
+    if(Object.keys(savedDenom).length){document.querySelectorAll('.count').forEach(inp=>{const d=inp.dataset.denom;if(savedDenom[d]!==undefined)inp.value=savedDenom[d];});}
+    if(localStorage.getItem(STORAGE_AUTOSAVE)==='true'){autoSaveEnabled=true;document.getElementById('autoStatus').textContent='ON';}
+    const notes=localStorage.getItem(STORAGE_NOTES)||'';document.getElementById('myNotes').value=notes;
+  }catch(e){console.warn('Could not parse saved data',e);}
+  recomputeAllDenoms();
+  attachCollectorListeners();
+  renderSummary();
+}
+window.onload=function(){attachCollectorListeners();buildDenomRows();initFromStorage();};
+</script>
 </body>
 </html>
