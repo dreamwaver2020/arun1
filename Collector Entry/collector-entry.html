@@ -1,353 +1,349 @@
 <!DOCTYPE html>
 <html lang="ne">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Collector Entry + Exact Cash Denomination (Manual Cash Entry)</title>
-<style>
-  body {font-family: 'Segoe UI', Arial, sans-serif; background: #e0f7fa; margin: 0; padding: 10px;}
-  h1 {text-align: center; color: #00796b; margin-bottom: 10px;}
-  .table-container {overflow-x: auto; margin-bottom: 12px;}
-  table {width: 100%; border-collapse: collapse; font-size: 0.9em;}
-  th, td {border: 1px solid #b2dfdb; padding: 5px; text-align: center;}
-  th {background-color: #004d40; color: white;}
-  input {width: 80px; text-align: right;}
-  .green {background-color: #c8e6c9;}
-  .pink {background-color: #f8bbd0;}
-  .btn {padding: 8px 15px; background: #00796b; color: white; border: none; cursor: pointer; border-radius: 4px; margin: 5px 2px;}
-  .btn:hover {background: #004d40;}
-  #summarySection {background: white; padding: 10px; border-radius: 6px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);} 
-  #summarySection h2 {color: #003e36; font-size: 1.1em; margin-bottom: 10px;}
-  .wrap{max-width: 930px;margin: 0 auto 18px;border: 3px solid #bfbfbf;background: linear-gradient(#f8fbff,#f1fbff);}
-  .topbar{background: #cfcfcf;padding: 10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid #d9d9d9;}
-  .title{font-weight:700;font-size:20px;color:#2b4a54;}
-  .container{display:flex;gap:12px;padding:12px;}
-  .left {width: 62%;background: #fff;padding: 10px;border-radius:4px;box-shadow: 0 1px 2px rgba(0,0,0,0.06);} 
-  table.denom{width:100%;border-collapse:collapse;table-layout:fixed;}
-  table.denom th, table.denom td{border:1px solid #bfcbd4;padding:8px 6px;text-align:left;vertical-align:middle;}
-  table.denom thead th{background: #d7e7ee;color: #052033;font-weight:700;text-align:left;padding:10px;}
-  .denom-label{width:18%;font-weight:700;color:#013a4a;}
-  .count-cell input{width:100%;box-sizing:border-box;padding:6px;text-align:right;font-weight:700;border:1px solid #c7d7df;border-radius:4px;background: #fafcff;}
-  .row-total{text-align:right;font-weight:800;color:#0b3954;font-size:14px;}
-  .right {width:36%;padding:8px;background: linear-gradient(#eefcf3,#dff8ef);border-radius:4px;box-shadow: 0 1px 2px rgba(0,0,0,0.04);display:flex;flex-direction:column;gap:8px;}
-  .grand {background:#fff;border:2px solid #98e6b6;padding:10px;text-align:center;border-radius:6px;}
-  .grand .label{font-size:14px;font-weight:700;color:#013a4a;}
-  .grand .amount{font-size:46px;font-weight:900;color:#05394a;margin-top:6px;letter-spacing:1px;}
-  .small-panel{background:#e9f7ef;padding:8px;border-radius:6px;border:1px solid #cde9d5;font-size:14px;}
-  .depositor{background:#fff;border:1px solid #cedeea;padding:8px;border-radius:6px;}
-  .depositor label{display:block;font-size:12px;color:#18424a;margin-top:6px;}
-  .depositor input{width:100%;padding:6px;box-sizing:border-box;font-weight:700;border:1px solid #d7e7ec;border-radius:4px;}
-  .in-words{margin-top:6px;background:#fff4f0;border-top:6px solid #d9534f;padding:10px;text-align:center;font-weight:700;color:#4a2c2c;border-radius:4px;font-size:15px;}
-  .controls{display:flex;gap:8px;margin-top:6px;}
-  button.btn-denom{padding:8px 12px;border:none;background:#0b3954;color:white;font-weight:700;border-radius:4px;cursor:pointer;}
-  button.btn-denom.secondary{background:#3c6e71;}
-  footer.note{padding:8px 12px;text-align:center;font-size:13px;color:#333;border-top:1px dashed #eee;margin-top:8px;}
-  .notes-wrap{margin-top:18px;background:#fff;padding:10px;border-radius:6px;border:1px solid #d6ebea;}
-  .notes-header{display:flex;justify-content:space-between;align-items:center;}
-  .notes-title{font-weight:800;color:#073b3b}
-  .notes-body{margin-top:10px;display:none}
-  .notes-body textarea{width:100%;min-height:120px;box-sizing:border-box;padding:8px;border:1px solid #d7e7e7;border-radius:6px;font-weight:700}
-  @media (max-width:880px){.container{flex-direction:column;}.left,.right{width:100%}.grand .amount{font-size:34px}}
-  @media print{#toggleDenomBtn,#savePdfBtn,#toggleNotesBtn,.btn,.btn-denom,#btnCSVDenom{display:none!important}#denominationSection{display:block!important}.notes-body{display:block!important}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IRD E-Services Portal</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:"Segoe UI",Arial,sans-serif;background:#f0f4fb;color:#333;height:100vh;}
+    #loginPage{display:flex;justify-content:center;align-items:center;height:100vh;background:linear-gradient(120deg,#cfd6dd,#d5e0e9);}
+    .login-box{background:#fff;padding:30px;border-radius:10px;box-shadow:0 0 20px rgba(0,0,0,0.3);width:320px;text-align:center;}
+    .login-box h2{margin-bottom:15px;color:#003366;}
+    .login-box input{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:5px;}
+    .login-box button{width:100%;padding:10px;background:#003366;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:16px;}
+    .login-box button:hover{background:#0055aa;}
+    .error-msg{color:red;font-size:13px;display:none;}
+    #mainPage{display:none;height:100vh;overflow:hidden;}
+    header{background:linear-gradient(90deg,#002b5c,#004b8d);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:8px 20px;}
+    header img{height:60px;}
+    header .title{text-align:center;flex-grow:1;}
+    header .title h1{font-size:22px;}
+    .container{display:grid;grid-template-columns:250px 1fr;height:calc(100vh - 75px);}
+    .sidebar{background:#e9eff7;border-right:2px solid #c3cbe0;padding:10px;overflow-y:auto;}
+    .sidebar h3{color:#003366;margin-bottom:10px;}
+    .folder>div{cursor:pointer;padding:6px 10px;border-radius:4px;display:flex;align-items:center;}
+    .folder ul{margin-left:20px;margin-top:5px;list-style:none;display:none;}
+    .folder.open>ul{display:block;}
+    .folder ul li a{text-decoration:none;color:#003366;display:block;padding:4px 8px;border-radius:4px;}
+    .folder ul li a:hover{background:#c7d7f0;}
+    main{background:#fff;}
+    iframe{width:100%;height:100%;border:none;}
+    footer{background:#002b5c;color:#fff;text-align:center;font-size:12px;padding:6px;}
+  </style>
 </head>
 <body>
 
-<h1>Collector Detail Entry (Manual Cash Entry)</h1>
-
-<div class="table-container">
-<table id="collectorTable">
-  <thead>
-    <tr>
-      <th>Particulars</th><th>Saving</th><th>Loans</th><th>Total</th><th>NCBL</th><th>ESEWA</th><th>CASH</th><th>KHATA</th><th>Total Received</th><th>Difference</th><th>Status</th>
-    </tr>
-  </thead>
-  <tbody id="collectorBody">
-    <tr><td>Anita Dahal</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-    <tr><td>Bimala Khatri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-    <tr><td>Durga Neupane Khadka</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-    <tr><td>Ganga Basnet Kathet</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-    <tr><td>Gita Khatri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-    <tr><td>Manju Puri</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-    <tr><td>Sushila Parajuli</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-    <tr><td>Bank Deposits</td><td><input class="saving" value="0"></td><td><input class="loan" value="0"></td><td class="total green">0</td><td><input class="ncbl" value="0"></td><td><input class="esewa" value="0"></td><td><input class="cash" value="0"></td><td><input class="khata" value="0"></td><td class="totalReceived green">0</td><td class="difference pink">0</td><td class="status pink">Pending</td></tr>
-  </tbody>
-</table>
-</div>
-
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;justify-content:center;">
-  <button class="btn" onclick="saveData()">💾 Save Approved</button>
-  <button class="btn" onclick="resetAll()">♻️ Reset All</button>
-  <button class="btn" onclick="toggleAutoSave()">⚙️ Auto Save: <span id="autoStatus">OFF</span></button>
-  <button class="btn" id="savePdfBtn" onclick="saveAsPDF()">📄 Save as PDF</button>
-</div>
-
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;justify-content:center;">
-  <button class="btn" id="toggleDenomBtn" onclick="toggleDenom()">💵 Show Cash Denomination</button>
-  <button class="btn" id="toggleNotesBtn" onclick="toggleNotes()">📝 Show Notes for Me</button>
-</div>
-
-<div class="wrap" id="denominationSection" style="display:none;">
-  <div class="topbar">
-    <div class="title">Cash Denomination Calculator</div>
-    <div style="font-weight:700;color:#083b4c">Total Amount</div>
+<div id="loginPage">
+  <div class="login-box">
+    <h2>Arun Login Portal</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <div class="error-msg" id="error">Invalid username or password!</div>
+    <button onclick="login()">Login</button>
+    <p style="font-size:12px;margin-top:10px;">Use Info <b>Admin</b> / <b>*****</b></p>
   </div>
+</div>
+
+<div id="mainPage">
+  <header>
+    <img src="https://ird.gov.np/img/logo.png" alt="IRD Logo" onerror="this.style.display='none'">
+    <div class="title">
+      <h1>आन्तरिक राजस्व विभाग</h1>
+      <p>Inland Revenue Department, Government of Nepal</p>
+    </div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Flag_of_Nepal.svg" alt="Nepal Flag">
+  </header>
+
   <div class="container">
-    <div class="left">
-      <table class="denom" aria-label="Denomination table">
-        <thead><tr><th>Denomination</th><th style="width:24%;">Count</th><th style="width:32%;text-align:right;">Amount</th></tr></thead>
-        <tbody id="tbody-denom"></tbody>
-      </table>
-      <div style="display:flex;justify-content:space-between;margin-top:10px;align-items:center;">
-        <div style="font-weight:700;color:#114b53">Depositor Details</div>
-        <div style="font-weight:800;font-size:20px;color:#062f40" id="rightTotalSmall">0</div>
+    <div class="sidebar">
+      <h3>Online E-Services</h3>
+      <div class="folder">
+        <div onclick="toggleFolder(this)">📁 Integrated Tax System</div>
+        <ul>
+          <li><a href="https://ird.gov.np" target="contentFrame">General</a></li>
+          <li><a href="https://ird.gov.np/pan" target="contentFrame">Registration (PAN,VAT,EXCISE)</a></li>
+          <li><a href="https://ird.gov.np/vat" target="contentFrame">VAT</a></li>
+        </ul>
+      </div>
+      <div class="folder">
+        <div onclick="toggleFolder(this)">📁 Esewa</div>
+        <ul>
+          <li><a href="#" onclick="loadEsewaForm()">Form Submission</a></li>
+          <li><a href="#" onclick="loadCertificate()">Download Certificate</a></li>
+        </ul>
+      </div>
+    <div class="folder">
+        <div onclick="toggleFolder(this)">📁 Collector Entry</div>
+        <ul>
+          <li><a href="Collector Entry/collector-entry.html" target="contentFrame">Collector Entry</a></li>
+        </ul>
+      </div>
+    
+      <div class="folder">
+        <div onclick="toggleFolder(this)">📁 Banks</div>
+        <ul>
+          <li><a href="Online E-Services/Banks/bank-statement-update.html" target="contentFrame">Bank Statement Updater</a></li>\n          <li><a href="Online E-Services/Banks/statement-download.html" target="contentFrame">Statement Download</a></li>
+        </ul>
+      </div>
+      <div class="folder">
+        <div onclick="toggleFolder(this)">📁 Collector</div>
+        <ul>
+          <li><a href="Online E-Services/Collector/collector-details.html" target="contentFrame">Collector Details</a></li>\n          <li><a href="Online E-Services/Collector/collector-download.html" target="contentFrame">Collector Download</a></li>
+        </ul>
       </div>
     </div>
-    <div class="right">
-      <div class="grand">
-        <div class="label">Total Amount</div>
-        <div class="amount" id="grandTotal">0</div>
-      </div>
-      <div class="depositor">
-        <label>Member ID</label><input id="memberId" value="3361">
-        <label>Account No</label><input id="accNo" value="30030001528">
-        <label>Mobile No</label><input id="mobileNo" value="9804370723">
-      </div>
-      <div class="small-panel">
-        <div style="display:flex;justify-content:space-between"><strong>Depositor</strong><strong id="depTotal">0</strong></div>
-        <div style="margin-top:6px;font-size:13px;color:#0b3a3f">You can edit counts on left to update totals automatically.</div>
-      </div>
-      <div class="in-words" id="amountWords">Rupees Zero Only</div>
-      <div class="controls">
-        <button class="btn-denom" id="btnResetDenom">Reset</button>
-        <button class="btn-denom secondary" id="btnPrintDenom">Print</button>
-        <button class="btn-denom" id="btnCSVDenom">Export CSV</button>
-      </div>
-    </div>
+    <main><iframe name="contentFrame" id="contentFrame"></iframe></main>
   </div>
-  <footer class="note">💡 Cash Denomination total is now separate (manual CASH entry in collector table).</footer>
-</div>
 
-<div id="summarySection">
-  <h2>📋 Talpatti Summary (All Entries)</h2>
-  <div class="table-container">
-    <table id="summaryTable">
-      <thead><tr><th>#</th><th>Particulars</th><th>Total</th><th>Total Received</th><th>Difference</th><th>Status</th></tr></thead>
-      <tbody id="summaryBody"></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- Notes Section -->
-<div class="notes-wrap">
-  <div class="notes-header">
-    <div class="notes-title">Notes for Me</div>
-    <div style="display:flex;gap:8px;">
-      <button class="btn" onclick="clearNotes()">Clear Notes</button>
-      <button class="btn" onclick="saveNotes()">Save Notes</button>
-    </div>
-  </div>
-  <div class="notes-body" id="notesBody">
-    <textarea id="myNotes" placeholder="यहाँ आफ्ना नोटहरू लेख्नुहोस्..."></textarea>
-  </div>
+  <footer>© 2025 Inland Revenue Department, Government of Nepal</footer>
 </div>
 
 <script>
-const STORAGE_COLLECTOR_KEY='collectorData_v_final';
-const STORAGE_DENOM_KEY='denominationData_v_final';
-const STORAGE_AUTOSAVE='autoSaveEnabled_v_final';
-const STORAGE_NOTES='collectorNotes_v_final';
-let autoSaveEnabled=false;
-
-function parseNum(v){return isNaN(+v)?0:+v;}
-
-function updateRow(row){
-  const s=parseNum(row.querySelector('.saving').value);
-  const l=parseNum(row.querySelector('.loan').value);
-  const total=s+l;
-  row.querySelector('.total').textContent=total.toFixed(2);
-  const n=parseNum(row.querySelector('.ncbl').value);
-  const e=parseNum(row.querySelector('.esewa').value);
-  const c=parseNum(row.querySelector('.cash').value);
-  const k=parseNum(row.querySelector('.khata').value);
-  const rec=n+e+c+k;
-  row.querySelector('.totalReceived').textContent=rec.toFixed(2);
-  const diff=total-rec;
-  row.querySelector('.difference').textContent=diff.toFixed(2);
-  row.querySelector('.status').textContent=Math.abs(diff)<0.005?'Approved':'Pending';
-  renderSummary();
-  if(autoSaveEnabled)saveData();
-}
-
-function attachCollectorListeners(){
-  document.querySelectorAll('#collectorTable input').forEach(inp=>{
-    inp.addEventListener('input',()=>updateRow(inp.closest('tr')));
-  });
-}
-
-function renderSummary(){
-  const body=document.getElementById('summaryBody');
-  body.innerHTML='';
-  const rows=document.querySelectorAll('#collectorBody tr');
-  rows.forEach((r,i)=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${i+1}</td><td>${r.cells[0].textContent}</td><td>${r.querySelector('.total').textContent}</td><td>${r.querySelector('.totalReceived').textContent}</td><td>${r.querySelector('.difference').textContent}</td><td>${r.querySelector('.status').textContent}</td>`;
-    body.appendChild(tr);
-  });
-}
-
-function saveData(){
-  const collectors=[];
-  document.querySelectorAll('#collectorBody tr').forEach(r=>{
-    collectors.push({
-      name:r.cells[0].textContent,
-      saving:r.querySelector('.saving').value||0,
-      loan:r.querySelector('.loan').value||0,
-      ncbl:r.querySelector('.ncbl').value||0,
-      esewa:r.querySelector('.esewa').value||0,
-      cash:r.querySelector('.cash').value||0,
-      khata:r.querySelector('.khata').value||0,
-      total:r.querySelector('.total').textContent,
-      totalReceived:r.querySelector('.totalReceived').textContent,
-      difference:r.querySelector('.difference').textContent,
-      status:r.querySelector('.status').textContent
-    });
-  });
-  localStorage.setItem(STORAGE_COLLECTOR_KEY,JSON.stringify(collectors));
-  const denomCounts={};
-  document.querySelectorAll('.count').forEach(inp=>{
-    denomCounts[inp.dataset.denom]=parseInt(inp.value||0,10);
-  });
-  localStorage.setItem(STORAGE_DENOM_KEY,JSON.stringify(denomCounts));
-}
-
-function resetAll(){
-  if(!confirm('Reset all data?'))return;
-  document.querySelectorAll('input').forEach(i=>{
-    if(i.classList.contains('saving')||i.classList.contains('loan')||i.classList.contains('ncbl')||i.classList.contains('esewa')||i.classList.contains('cash')||i.classList.contains('khata')||i.classList.contains('count'))i.value=0;
-  });
-  document.querySelectorAll('.total,.totalReceived,.difference').forEach(e=>e.textContent='0');
-  document.querySelectorAll('.status').forEach(e=>e.textContent='Pending');
-  recomputeAllDenoms();
-  renderSummary();
-}
-
-function toggleAutoSave(){
-  autoSaveEnabled=!autoSaveEnabled;
-  document.getElementById('autoStatus').textContent=autoSaveEnabled?'ON':'OFF';
-  localStorage.setItem(STORAGE_AUTOSAVE,autoSaveEnabled?'true':'false');
-}
-
-const DENOMS=[1000,500,100,50,20,10,5];
-const tbodyDenom=document.getElementById('tbody-denom');
-function buildDenomRows(){
-  tbodyDenom.innerHTML='';
-  for(const d of DENOMS){
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td class="denom-label">${d} X</td><td class="count-cell"><input type="number" min="0" step="1" class="count" data-denom="${d}" value="0"></td><td class="row-total" id="amt-${d}">0</td>`;
-    tbodyDenom.appendChild(tr);
+function login(){
+  const u=document.getElementById('username').value.trim();
+  const p=document.getElementById('password').value.trim();
+  if(u==='Admin'&&p==='Admin123'){
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('mainPage').style.display='block';
+  }else{
+    const e=document.getElementById('error');
+    e.style.display='block';
+    setTimeout(()=>e.style.display='none',3000);
   }
 }
-buildDenomRows();
+function toggleFolder(el){el.parentElement.classList.toggle('open');}
 
-function recomputeAllDenoms(){
-  let grand=0;
-  document.querySelectorAll('.count').forEach(inp=>{
-    const denom=parseInt(inp.dataset.denom,10);
-    const cnt=Math.max(0,parseInt(inp.value||0,10));
-    const amt=denom*cnt;
-    const el=document.getElementById('amt-'+denom);
-    if(el)el.textContent=amt.toLocaleString('en-IN');
-    grand+=amt;
+function loadEsewaForm(){
+const f=document.getElementById('contentFrame');
+f.srcdoc=`<html><head><meta charset='utf-8'><title>Esewa Form</title>
+<style>
+body{font-family:"Segoe UI",sans-serif;background:#f4f6fb;padding:25px;}
+.form-container{max-width:820px;margin:auto;}
+form{background:#fff;padding:25px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+form h2{text-align:center;color:#003366;margin-bottom:18px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
+label{font-weight:600;color:#003366;}
+input,select{width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;}
+.actions{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:15px;}
+button{padding:10px 16px;border:none;border-radius:6px;cursor:pointer;font-weight:600;}
+button.small{font-size:14px;}
+button.export{background:#28a745;color:#fff;}
+button.secondary{background:#5a7fa8;color:#fff;}
+button.submit{background:#003366;color:#fff;}
+.table-wrap{margin-top:25px;overflow:auto;}
+table{width:100%;border-collapse:collapse;}
+th,td{border:1px solid #dee2e6;padding:10px;text-align:center;font-size:14px;}
+th{background:#003366;color:#fff;}
+.btn-small{padding:5px 10px;border-radius:4px;font-size:13px;}
+.edit{background:#f0ad4e;color:#fff;border:none;}
+.del{background:#d9534f;color:#fff;border:none;}
+.search{margin-top:10px;padding:8px;width:220px;border-radius:6px;border:1px solid #ccc;}
+.count{font-size:13px;color:#333;margin-top:5px;}
+.filter-buttons{margin-top:10px;}
+.filter-buttons button{padding:6px 12px;margin-right:6px;border:none;border-radius:5px;background:#5a7fa8;color:#fff;cursor:pointer;font-size:13px;}
+.filter-buttons button:hover{background:#003366;}
+</style></head><body>
+<div class='form-container'>
+<form id='esewaForm'>
+<h2>Esewa Form Submission</h2>
+<div class='grid'>
+<div><label>Date</label><input type='date' id='date' required></div>
+<div><label>Esewa TRX Code</label><input type='text' id='trx' placeholder='Enter Esewa Transaction Code' required></div>
+<div><label>Sender Name</label><input type='text' id='sender' placeholder='Enter Sender Name' required></div>
+<div><label>Amount (NPR)</label><input type='number' id='amount' placeholder='Enter Amount' min='0' required></div>
+<div><label>Status</label><select id='status'><option>Pending</option><option>Approved</option><option>Failed</option></select></div>
+</div>
+<div class='actions'>
+<div><button type='button' id='exportCSV' class='small export'>Export CSV</button> <button type='button' id='exportXLS' class='small export'>Export Excel (.xls)</button></div>
+<div><button type='reset' class='small secondary'>Reset</button> <button type='submit' id='submitBtn' class='small submit'>Submit</button></div>
+</div>
+</form>
+
+<!-- Quick filter buttons -->
+<div class="filter-buttons">
+  <button onclick="render('Pending')">Pending</button>
+  <button onclick="render('Approved')">Approved</button>
+  <button onclick="render('Failed')">Failed</button>
+  <button onclick="render('')">All</button>
+</div>
+
+<div>
+  <input type='text' id='searchInput' class='search' placeholder='Search TRX / Sender / Status / Date...'>
+  <div class='count'>Total entries: <span id='totalCount'>0</span></div>
+</div>
+<div class='table-wrap'><table id='dataTable'><thead><tr><th>#</th><th>Date</th><th>TRX Code</th><th>Sender</th><th>Amount (NPR)</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+</div>
+
+<script>
+const STORAGE_KEY='esewa_entries_v1';
+let entries=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+let editId=null;
+const form=document.getElementById('esewaForm');
+const dateEl=document.getElementById('date');
+const trxEl=document.getElementById('trx');
+const senderEl=document.getElementById('sender');
+const amountEl=document.getElementById('amount');
+const statusEl=document.getElementById('status');
+const tableBody=document.querySelector('#dataTable tbody');
+const totalCountEl=document.getElementById('totalCount');
+const searchInput=document.getElementById('searchInput');
+
+function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(entries));}
+
+function render(filter=''){
+  const q=filter.trim().toLowerCase();
+  let list = entries.filter(e=>{
+    if(!q) return true;
+    // match against trx, sender, status, date, amount
+    const trx = (e.trx||'').toLowerCase();
+    const sender = (e.sender||'').toLowerCase();
+    const status = (e.status||'').toLowerCase();
+    const date = (e.date||'').toLowerCase();
+    const amount = String(e.amount || '').toLowerCase();
+    return trx.includes(q) || sender.includes(q) || status.includes(q) || date.includes(q) || amount.includes(q);
   });
-  document.getElementById('grandTotal').textContent=grand.toLocaleString('en-IN');
-  document.getElementById('depTotal').textContent=grand.toLocaleString('en-IN');
-  document.getElementById('rightTotalSmall').textContent=grand.toLocaleString('en-IN');
-  document.getElementById('amountWords').textContent=numberToWordsIndian(grand);
-  if(autoSaveEnabled)saveData();
+
+  tableBody.innerHTML='';
+  // show latest first
+  list.slice().reverse().forEach((e,i)=>{
+    tableBody.innerHTML+=\`<tr>
+      <td>\${i+1}</td>
+      <td>\${e.date}</td>
+      <td>\${e.trx}</td>
+      <td>\${e.sender || ''}</td>
+      <td>\${Number(e.amount).toLocaleString()}</td>
+      <td>\${e.status}</td>
+      <td><button class='btn-small edit' data-id='\${e.id}'>Edit</button> <button class='btn-small del' data-id='\${e.id}'>Delete</button></td>
+    </tr>\`;
+  });
+  totalCountEl.textContent=list.length;
 }
 
-function numberToWordsIndian(num){
-  num=Math.floor(num);
-  if(num===0)return'Rupees Zero Only';
-  const u=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
-  const t=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
-  function two(n){if(n<20)return u[n];const T=Math.floor(n/10);const U=n%10;return t[T]+(U?" "+u[U]:"");}
-  function three(n){const h=Math.floor(n/100);const r=n%100;let s="";if(h)s+=u[h]+" Hundred";if(r){if(s)s+=" ";s+=two(r);}return s;}
-  let c=Math.floor(num/10000000);num%=10000000;let l=Math.floor(num/100000);num%=100000;let th=Math.floor(num/1000);num%=1000;const r=num;
-  const p=[];if(c)p.push(three(c)+" Crore");if(l)p.push(three(l)+" Lakh");if(th)p.push(three(th)+" Thousand");if(r)p.push(three(r));
-  return"Rupees "+p.join(" ")+" Only";
-}
+render();
 
-document.addEventListener('input',e=>{if(e.target.classList.contains('count'))recomputeAllDenoms();});
-document.getElementById('btnResetDenom').addEventListener('click',()=>{if(!confirm('Reset all counts?'))return;document.querySelectorAll('.count').forEach(i=>i.value=0);recomputeAllDenoms();});
-document.getElementById('btnPrintDenom').addEventListener('click',()=>window.print());
-document.getElementById('btnCSVDenom').addEventListener('click',()=>{
-  const rows=[['Denomination','Count','Amount']];
-  document.querySelectorAll('.count').forEach(i=>{const d=i.dataset.denom;const c=parseInt(i.value||0,10);rows.push([d,c,d*c]);});
-  rows.push(['Grand Total','',document.getElementById('grandTotal').textContent]);
-  const csv=rows.map(r=>r.map(cell=>`"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='denominations.csv';a.click();URL.revokeObjectURL(url);
+form.addEventListener('submit',e=>{
+  e.preventDefault();
+  const d={
+    id: editId || ('id_'+Date.now()),
+    date: dateEl.value,
+    trx: trxEl.value.trim(),
+    sender: senderEl.value.trim(),
+    amount: Number(amountEl.value) || 0,
+    status: statusEl.value,
+    createdAt: Date.now()
+  };
+  if(!d.date || !d.trx || !d.sender){
+    alert('Please fill Date, TRX and Sender fields');
+    return;
+  }
+  if(editId){
+    entries = entries.map(x=> x.id===editId ? d : x);
+    editId = null;
+    alert('Entry updated!');
+    document.getElementById('submitBtn').textContent='Submit';
+  }else{
+    entries.push(d);
+    alert('Form Submitted!');
+  }
+  save();
+  form.reset();
+  render(searchInput.value.trim());
 });
 
-function toggleDenom(){
-  const sec=document.getElementById('denominationSection');
-  const btn=document.getElementById('toggleDenomBtn');
-  if(sec.style.display==='block'){sec.style.display='none';btn.textContent='💵 Show Cash Denomination';}
-  else{sec.style.display='block';btn.textContent='💵 Hide Cash Denomination';}
-}
-
-function toggleNotes(){
-  const body=document.getElementById('notesBody');
-  const btn=document.getElementById('toggleNotesBtn');
-  if(body.style.display==='block'){body.style.display='none';btn.textContent='📝 Show Notes for Me';}
-  else{body.style.display='block';btn.textContent='📝 Hide Notes for Me';}
-}
-
-function saveNotes(){
-  const v=document.getElementById('myNotes').value||'';
-  localStorage.setItem(STORAGE_NOTES, v);
-  alert('Notes saved locally');
-}
-
-function clearNotes(){
-  if(!confirm('Clear notes?'))return;
-  document.getElementById('myNotes').value='';
-  localStorage.removeItem(STORAGE_NOTES);
-}
-
-function saveAsPDF(){
-  const denom=document.getElementById('denominationSection');
-  const notes=document.getElementById('notesBody');
-  const denomWasHidden=(denom.style.display!=='block');
-  const notesWasHidden=(notes.style.display!=='block');
-  denom.style.display='block';
-  notes.style.display='block';
-  setTimeout(()=>{
-    window.print();
-    if(denomWasHidden)denom.style.display='none';
-    if(notesWasHidden)notes.style.display='none';
-  },250);
-}
-
-function initFromStorage(){
-  try{
-    const saved=JSON.parse(localStorage.getItem(STORAGE_COLLECTOR_KEY)||'[]');
-    if(saved.length){
-      const rows=document.querySelectorAll('#collectorBody tr');
-      saved.forEach((d,i)=>{if(rows[i]){rows[i].querySelector('.saving').value=d.saving||0;rows[i].querySelector('.loan').value=d.loan||0;rows[i].querySelector('.ncbl').value=d.ncbl||0;rows[i].querySelector('.esewa').value=d.esewa||0;rows[i].querySelector('.cash').value=d.cash||0;rows[i].querySelector('.khata').value=d.khata||0;}});
+tableBody.addEventListener('click',e=>{
+  if(e.target.classList.contains('edit')){
+    const id=e.target.dataset.id;
+    const item=entries.find(x=>x.id===id);
+    if(item){
+      dateEl.value=item.date || '';
+      trxEl.value=item.trx || '';
+      senderEl.value=item.sender || '';
+      amountEl.value=item.amount || '';
+      statusEl.value=item.status || 'Pending';
+      editId=id;
+      document.getElementById('submitBtn').textContent='Update';
+      form.scrollIntoView({behavior:'smooth'});
     }
-    const savedDenom=JSON.parse(localStorage.getItem(STORAGE_DENOM_KEY)||'{}');
-    if(Object.keys(savedDenom).length){document.querySelectorAll('.count').forEach(inp=>{const d=inp.dataset.denom;if(savedDenom[d]!==undefined)inp.value=savedDenom[d];});}
-    if(localStorage.getItem(STORAGE_AUTOSAVE)==='true'){autoSaveEnabled=true;document.getElementById('autoStatus').textContent='ON';}
-    const notes=localStorage.getItem(STORAGE_NOTES)||'';document.getElementById('myNotes').value=notes;
-  }catch(e){console.warn('Could not parse saved data',e);}
-  recomputeAllDenoms();
-  attachCollectorListeners();
-  renderSummary();
+  }
+  if(e.target.classList.contains('del')){
+    if(confirm('Delete this entry?')){
+      entries = entries.filter(x=>x.id!==e.target.dataset.id);
+      save();
+      render(searchInput.value.trim());
+    }
+  }
+});
+
+searchInput.addEventListener('input',()=>render(searchInput.value.trim()));
+
+// CSV Export
+document.getElementById('exportCSV').addEventListener('click',()=>{
+  if(entries.length===0){alert('No data');return;}
+  const header=['Date','TRX Code','Sender','Amount','Status'];
+  // make rows descending (latest first)
+  const rows = entries.slice().reverse().map(e=>[
+    e.date,
+    e.trx,
+    e.sender || '',
+    e.amount,
+    e.status
+  ]);
+  // CSV escaping: wrap each field that contains comma or quote in double quotes and escape quotes
+  const csv = [header, ...rows].map(r => r.map(field => {
+    const s = String(field ?? '');
+    if(s.includes('"')) return '"' + s.replace(/"/g,'""') + '"';
+    if(s.includes(',') || s.includes('\\n')) return '"' + s + '"';
+    return s;
+  }).join(',')).join('\\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='esewa_entries.csv';a.click();URL.revokeObjectURL(url);
+});
+
+// XLS Export (simple HTML table)
+document.getElementById('exportXLS').addEventListener('click',()=>{
+  if(entries.length===0){alert('No data');return;}
+  let html='<table border=1><tr><th>Date</th><th>TRX Code</th><th>Sender</th><th>Amount</th><th>Status</th></tr>';
+  entries.slice().reverse().forEach(e=>{
+    html+=\`<tr><td>\${e.date}</td><td>\${e.trx}</td><td>\${(e.sender||'')}</td><td>\${e.amount}</td><td>\${e.status}</td></tr>\`;
+  });
+  html+='</table>';
+  const blob=new Blob([html],{type:'application/vnd.ms-excel'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='esewa_entries.xls';a.click();URL.revokeObjectURL(url);
+});
+<\/script></body></html>`;
 }
 
-window.onload=function(){attachCollectorListeners();buildDenomRows();initFromStorage();};
+function loadCertificate(){
+const f=document.getElementById('contentFrame');
+f.srcdoc=`<html><head><meta charset='utf-8'><title>Certificate</title>
+<style>body{font-family:Arial;background:#fff;padding:20px;}
+h2{text-align:center;color:#003366;margin-bottom:10px;}
+button{padding:8px 12px;background:#003366;color:#fff;border:none;border-radius:5px;cursor:pointer;margin-bottom:10px;}
+table{width:100%;border-collapse:collapse;}
+th,td{border:1px solid:#000;padding:6px;text-align:center;}
+th{background:#f0f0f0;}
+@media print{button{display:none}}</style></head><body>
+<h2>Esewa Form Submission Certificate</h2>
+<button onclick="window.print()">📄 Download Certificate (PDF)</button>
+<table id='tbl'><thead><tr><th>#</th><th>Date</th><th>TRX Code</th><th>Sender</th><th>Amount (NPR)</th><th>Status</th></tr></thead><tbody></tbody></table>
+<script>
+const arr=JSON.parse(localStorage.getItem('esewa_entries_v1')||'[]');
+const tb=document.querySelector('#tbl tbody');
+if(!arr || arr.length==0){
+  tb.innerHTML='<tr><td colspan=6>No records found</td></tr>';
+}else{
+  // show latest first
+  arr.slice().reverse().forEach((e,i)=>{
+    const amountFormatted = Number(e.amount || 0).toLocaleString();
+    tb.innerHTML+=\`<tr><td>\${i+1}</td><td>\${e.date}</td><td>\${e.trx}</td><td>\${e.sender||''}</td><td>\${amountFormatted}</td><td>\${e.status}</td></tr>\`;
+  });
+}
+<\/script></body></html>`;
+}
+
 </script>
 </body>
 </html>
