@@ -86,8 +86,8 @@ updateTime();
 // ✅ GitHub मा डेटा पठाउने function
 async function saveToGitHub(filename, content) {
   const GITHUB_USERNAME = "dreamwaver2020";
-  const REPO_NAME = "arun";
-  const TOKEN = "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"; // 👉 यहाँ आफ्नो token राख्नुहोस्
+  const REPO_NAME = "arun1";
+  const TOKEN = "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"; // 👉 यहाँ आफ्नो token राख्नुहोस्
 
   const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${filename}`;
   const encodedContent = btoa(unescape(encodeURIComponent(content)));
