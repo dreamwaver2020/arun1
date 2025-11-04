@@ -324,10 +324,10 @@
     let sha = null;
     try {
       const getResp = await fetch(apiUrl + `?ref=${BRANCH}`, {
-        headers: { "Authorization": `token ${TOKEN}` }
+        headers: { "Authorization": `token ${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}` }
       });
       if (getResp.ok) {
-        const data = await getResp.json();
+        const data = await getResp.json(auto_backup.json);
         if (data && data.sha) sha = data.sha;
       }
     } catch (err) {
@@ -344,7 +344,7 @@
     const response = await fetch(apiUrl, {
       method: "PUT",
       headers: {
-        "Authorization": `token ${TOKEN}`,
+        "Authorization": `token ${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}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify(body)
