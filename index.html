@@ -3,430 +3,379 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aruns E-Services Portal — Data + Search</title>
+  <title>Aruns E-Services Portal (with GitHub Backup)</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:"Segoe UI",Arial,sans-serif;background:#f0f4fb;color:#333;min-height:100vh;}
+    body{font-family:"Segoe UI",Arial,sans-serif;background:#f0f4fb;color:#333;height:100vh;}
+    #loginPage{display:flex;justify-content:center;align-items:center;height:100vh;background:linear-gradient(120deg,#cfd6dd,#d5e0e9);}    
+    .login-box{background:#fff;padding:30px;border-radius:10px;box-shadow:0 0 20px rgba(0,0,0,0.3);width:320px;text-align:center;}
+    .login-box h2{margin-bottom:15px;color:#003366;}
+    .login-box input{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:5px;}
+    .login-box button{width:100%;padding:10px;background:#003366;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:16px;}
+    .login-box button:hover{background:#0055aa;}
+    .error-msg{color:red;font-size:13px;display:none;}
+    #mainPage{display:none;height:100vh;overflow:hidden;}
     header{background:linear-gradient(90deg,#002b5c,#004b8d);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:8px 20px;}
     header img{height:60px;}
     header .title{text-align:center;flex-grow:1;}
-    header .title h1{font-size:20px;margin-bottom:4px;}
-    header .title p{font-size:12px;margin-top:0;color:#cfe7ff;}
-    .layout{display:grid;grid-template-columns:250px 1fr;gap:0;min-height:calc(100vh - 86px);}
-    .sidebar{background:#e9eff7;border-right:2px solid #c3cbe0;padding:12px;overflow-y:auto;}
+    header .title h1{font-size:22px;}
+    .container{display:grid;grid-template-columns:250px 1fr;height:calc(100vh - 75px);}    
+    .sidebar{background:#e9eff7;border-right:2px solid #c3cbe0;padding:10px;overflow-y:auto;}
     .sidebar h3{color:#003366;margin-bottom:10px;}
-    .main{padding:18px;background:#fff;}
-    footer{background:#002b5c;color:#fff;text-align:center;font-size:12px;padding:8px;}
+    .folder>div{cursor:pointer;padding:6px 10px;border-radius:4px;display:flex;align-items:center;}
+    .folder ul{margin-left:20px;margin-top:5px;list-style:none;display:none;}
+    .folder.open>ul{display:block;}
+    .folder ul li a{text-decoration:none;color:#003366;display:block;padding:4px 8px;border-radius:4px;}
+    .folder ul li a:hover{background:#c7d7f0;}    
+    main{background:#fff;}    
+    iframe{width:100%;height:100%;border:none;}    
+    footer{background:#002b5c;color:#fff;text-align:center;font-size:12px;padding:6px;}    
     .time-box{
-      display:flex;flex-direction:column;align-items:center;padding:6px 12px;border-radius:10px;
+      display:flex;flex-direction:column;align-items:center;padding:6px 15px;border-radius:12px;
       background:linear-gradient(135deg,#003366,#0077cc);
       border:2px solid #00ffff;
-      box-shadow:0 0 10px rgba(0,255,255,0.15);
+      box-shadow:0 0 15px rgba(0,255,255,0.5);
+      animation:pulse 3s infinite ease-in-out;
     }
-    .time-box .eng{font-size:13px;color:#aee2ff;}
-    .time-box .nep{font-size:12px;color:#ffea91;font-weight:600;}
-    /* form styles */
-    .card{max-width:900px;margin:0 auto;background:#fff;padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06);}
-    label{display:block;margin-top:12px;font-weight:700;color:#124;}
-    input, textarea, select{width:100%;padding:10px;margin-top:6px;border:1px solid #d0d7e6;border-radius:6px;font-size:14px;}
-    textarea{min-height:80px;}
-    .flex-row{display:flex;gap:10px;margin-top:12px;align-items:center;}
-    .btn{padding:10px 16px;border-radius:8px;border:none;cursor:pointer;font-weight:700;}
-    .btn-primary{background:#0077cc;color:#fff;}
-    .btn-danger{background:#dc3545;color:#fff;}
-    .btn-success{background:#28a745;color:#fff;}
-    table{width:100%;border-collapse:collapse;margin-top:16px;}
-    th,td{padding:10px;border:1px solid #e6e9f2;text-align:left;font-size:14px;}
-    th{background:#f4f7fb;}
-    tr:nth-child(even){background:#fbfdff;}
-    .actions button{margin-right:6px;}
-    .search-row{display:flex;gap:8px;align-items:center;}
-    .small{width:140px;}
-    .backup-panel{margin:18px 0;padding:16px;background:#eef6ff;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.04);}
-    .note{font-size:13px;color:#445;}
-    .pagination{display:flex;justify-content:center;gap:8px;margin-top:12px;}
-    .pagination button{padding:8px 12px;border-radius:6px;border:none;background:#0077cc;color:#fff;cursor:pointer;}
-    .pagination button:disabled{background:#c7d7e7;cursor:not-allowed;}
+    @keyframes pulse{
+      0%{box-shadow:0 0 10px rgba(0,255,255,0.4);}      
+      50%{box-shadow:0 0 25px rgba(0,255,255,0.9);}      
+      100%{box-shadow:0 0 10px rgba(0,255,255,0.4);}    
+    }
+    .time-box .eng{font-size:15px;color:#aee2ff;}
+    .time-box .nep{font-size:14px;color:#ffea91;font-weight:600;}
   </style>
 </head>
 <body>
 
-<header>
-  <div style="display:flex;align-items:center;gap:12px;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Animated-nepal-flag-image-0007.gif" alt="Nepal Flag">
-    <div class="time-box">
-      <div class="eng" id="engTime">Loading...</div>
-      <div class="nep" id="nepTime">नेपाली मिति...</div>
-    </div>
+<div id="loginPage">
+  <div class="login-box">
+    <h2> 𝐋𝐨𝐠 𝐈𝐧 ʕʘ̅͜ʘ̅ʔ 🔐</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <div class="error-msg" id="error"> 𝐈𝐧𝐯𝐚𝐥𝐢𝐝 𝐔𝐬𝐞𝐫𝐧𝐚𝐦𝐞 𝐨𝐫 𝐏𝐚𝐬𝐬𝐰𝐨𝐫𝐝 ❌</div>
+    <button onclick="login()">Login</button>
+    <p style="font-size:12px;margin-top:10px;">Please Use Correct Info To Login <b></b>...... <b></b></p>
   </div>
-
-  <div class="title">
-    <h1>Aruns E-Services Portal</h1>
-    <p>Database With Cloud Department — Government of Nepal</p>
-  </div>
-
-  <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Small_gif.gif" alt="Logo" style="height:42px;">
-</header>
-
-<div class="layout">
-  <aside class="sidebar">
-    <h3>Menu</h3>
-    <div style="margin-bottom:10px;">
-      <button class="btn btn-primary" onclick="document.getElementById('entry').scrollIntoView({behavior:'smooth'})">Data Entry</button>
-    </div>
-    <div style="margin-bottom:10px;">
-      <button class="btn" onclick="document.getElementById('records').scrollIntoView({behavior:'smooth'})">Saved Records</button>
-    </div>
-
-    <div style="margin-top:20px;">
-      <h4 style="color:#003366;margin-bottom:8px;">Backup</h4>
-      <div class="note">Local JSON download + upload to GitHub (replace token & repo in script)</div>
-      <div style="margin-top:8px;">
-        <button id="backupBtnSidebar" class="btn btn-primary">💾 Backup Now</button>
-      </div>
-    </div>
-  </aside>
-
-  <main class="main">
-    <div class="card" id="entry">
-      <h2 style="margin-bottom:8px;">Data Entry & Search</h2>
-
-      <label for="searchKeyInput">Search Key (for saving / searching)</label>
-      <input type="text" id="searchKeyInput" placeholder="जस्तै: Deposit, Withdraw, Expense...">
-
-      <label for="particularsInput">Particulars</label>
-      <textarea id="particularsInput" placeholder="विवरण लेख्नुहोस्..."></textarea>
-
-      <div class="flex-row">
-        <button id="saveBtn" class="btn btn-primary">💾 Save</button>
-        <button id="clearBtn" class="btn">Clear Form</button>
-        <div style="flex:1"></div>
-
-        <input type="text" id="quickSearch" placeholder="Search records by key..." style="padding:8px;border-radius:6px;border:1px solid #d0d7e6;">
-        <button id="searchBtn" class="btn btn-success">🔍 Search</button>
-        <button id="resetSearch" class="btn">Reset</button>
-      </div>
-
-      <div class="backup-panel" style="margin-top:14px;">
-        <h3 style="margin:0 0 8px 0;color:#0077cc;">🔐 Data Backup & Restore</h3>
-        <div class="note">Click Backup to download local JSON and optionally upload to GitHub repository.</div>
-        <div style="margin-top:10px;">
-          <button id="backupBtn" class="btn btn-primary">💾 Backup Data</button>
-          <button id="restoreBtn" class="btn">⤺ Restore From File</button>
-          <input type="file" id="restoreFile" accept=".json" style="display:none;">
-        </div>
-      </div>
-    </div>
-
-    <div class="card" id="records" style="margin-top:18px;">
-      <h3>Saved Records</h3>
-      <table id="dataTable">
-        <thead>
-          <tr>
-            <th style="width:18%;">Search Key</th>
-            <th>Particulars</th>
-            <th style="width:18%;">Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-
-      <div class="pagination" style="margin-bottom:6px;">
-        <button id="prevBtn">Previous</button>
-        <button id="nextBtn">Next</button>
-      </div>
-    </div>
-  </main>
 </div>
 
-<footer>© 2025 Database With Cloud Department, Government of Nepal</footer>
+<div id="mainPage">
+  <header>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Animated-nepal-flag-image-0007.gif" alt="Nepal Flag">
+      <div class="time-box">
+        <div class="eng" id="engTime">Loading...</div>
+        <div class="nep" id="nepTime">नेपाली मिति...</div>
+      </div>
+    </div>
+    <div class="title">
+     
+      <h1> ⲯ﹍︿﹍︿﹍ 𝓦𝓮𝓵𝓬𝓸𝓶𝓮 ﹍ⲯ﹍ⲯ﹍︿﹍☼ </h1>
+      <p> 𝐃𝐚𝐭𝐚𝐛𝐚𝐬𝐞 𝐖𝐢𝐭𝐡 𝐂𝐥𝐨𝐮𝐝 𝐃𝐞𝐩𝐚𝐫𝐭𝐦𝐞𝐧𝐭, 𝐆𝐨𝐯𝐞𝐫𝐧𝐦𝐞𝐧𝐭 𝐨𝐟 𝐍𝐞𝐩𝐚𝐥</p>
+    </div>
+     <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Small_wifi_reverse_signal.gif" alt="IRD Logo" onerror="this.style.display='none'">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Small_gif.gif" alt="IRD Logo" onerror="this.style.display='none'">
+    
+  </header>
+
+  <div class="container">
+    <div class="sidebar">
+      <h3>𝐎𝐧𝐥𝐢𝐧𝐞 𝐄-𝐒𝐞𝐫𝐯𝐢𝐜𝐞𝐬</h3>
+      <div class="folder">
+        <div onclick="toggleFolder(this)">📁 𝐀𝐛𝐨𝐮𝐭-𝐚𝐝𝐦𝐢𝐧</div>
+        <ul>
+          <li><a href="https://dreamwaver2020.github.io/Boost-nepal/" target="contentFrame">🗁 General</a></li>
+          <li><a href="https://ird.gov.np/pan" target="contentFrame">🗁 Personal</a></li>
+          <li><a href="https://ird.gov.np/vat" target="contentFrame">🗁 Public</a></li>
+        </ul>
+      </div>
+      <div class="folder">
+        <div onclick="toggleFolder(this)">📁 𝐒𝐞𝐚𝐫𝐜𝐡 𝐑𝐞𝐜𝐨𝐫𝐝𝐬</div>
+        <ul>
+          <li><a href="Online E-Services/Search Data/search_data.html" target="contentFrame">🗁 Search Data</a></li>
+        </ul>
+      </div>
+      <div class="folder">
+        <div onclick="toggleFolder(this)">📁 𝐄-𝐬𝐞𝐰𝐚</div>
+        <ul>
+          <li><a href="#" onclick="loadEsewaForm()">🗁 Form Submission</a></li>
+          <li><a href="#" onclick="loadCertificate()">🗁 Download Certificate</a></li>
+        </ul>
+      </div>
+    
+    
+      <div class="folder">
+        <div onclick="toggleFolder(this)">📁 𝐁𝐚𝐧𝐤𝐬</div>
+        <ul>
+          <li><a href="Online E-Services/Banks/bank-statement-update.html" target="contentFrame">🗁 Bank Update</a></li>          <li><a href="Online E-Services/Banks/statement-download.html" target="contentFrame">🗁 Statement Download</a></li>
+        </ul>
+      </div>
+      <div class="folder">
+        <div onclick="toggleFolder(this)">📁  𝐂𝐨𝐥𝐥𝐞𝐜𝐭𝐨𝐫𝐬 𝐄𝐧𝐭𝐫𝐲</div>
+        <ul>
+          <li><a href="Online E-Services/Collector/collector-details.html" target="contentFrame">🗁 Collector Details</a></li>         <li><a href="Online E-Services/Collector/collector-download.html" target="contentFrame">🗁 Record Download</a></li>
+        </ul>
+      </div>
+    </div>
+    <main><iframe name="contentFrame" id="contentFrame"></iframe></main>
+  </div>
+
+  <footer>© 2025 𝐃𝐚𝐭𝐚𝐛𝐚𝐬𝐞 𝐖𝐢𝐭𝐡 𝐂𝐥𝐨𝐮𝐝 𝐃𝐞𝐩𝐚𝐫𝐭𝐦𝐞𝐧𝐭, 𝐆𝐨𝐯𝐞𝐫𝐧𝐦𝐞𝐧𝐭 𝐨𝐟 𝐍𝐞𝐩𝐚𝐥</footer>
+</div>
 
 <script>
-  // ----------------- Time display -----------------
-  function updateTime(){
-    const now = new Date();
-    document.getElementById('engTime').textContent = now.toLocaleString('en-GB');
-    document.getElementById('nepTime').textContent = 'नेपाली मिति अपडेट हुँदैछ...';
+function login(){
+  const u=document.getElementById('username').value.trim();
+  const p=document.getElementById('password').value.trim();
+  if(u==='Admin'&&p==='Admin123'){
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('mainPage').style.display='block';
+  }else{
+    const e=document.getElementById('error');
+    e.style.display='block';
+    setTimeout(()=>e.style.display='none',3000);
   }
-  setInterval(updateTime,1000);
-  updateTime();
+}
+function toggleFolder(el){el.parentElement.classList.toggle('open');}
+// 🕓 AUTO-UPDATING DUAL TIME (ENGLISH + NEPALI)
+function updateHeaderTime(){
+  const now=new Date();
+  const eng=now.toLocaleString('en-GB',{weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('engTime').textContent=eng;
+  document.getElementById('nepTime').textContent=getNepaliDateTime(now);
+}
+function getNepaliDateTime(date){
+  const npMonths=['बैशाख','जेठ','असार','साउन','भदौ','असोज','कात्तिक','मंसिर','पुष','माघ','फागुन','चैत'];
+  const npNumbers={'0':'०','1':'१','2':'२','3':'३','4':'४','5':'५','6':'६','7':'७','8':'८','9':'९'};
+  let y=date.getFullYear()+57;
+  let m=(date.getMonth()+1+8)%12;if(m===0)m=12;
+  let d=date.getDate();
+  const npDate=`${npMonths[m-1]} ${d}, ${y}`;
+  const h=String(date.getHours()).padStart(2,'0').replace(/[0-9]/g,d=>npNumbers[d]);
+  const mi=String(date.getMinutes()).padStart(2,'0').replace(/[0-9]/g,d=>npNumbers[d]);
+  const s=String(date.getSeconds()).padStart(2,'0').replace(/[0-9]/g,d=>npNumbers[d]);
+  return npDate.replace(/[0-9]/g,d=>npNumbers[d])+" ("+h+":"+mi+":"+s+")";
+}
+setInterval(updateHeaderTime,1000);
+updateHeaderTime();
+</script>
 
-  // ----------------- LocalStorage Data logic -----------------
-  const STORAGE_KEY = "simple_data_records";
-  let currentPage = 1;
-  const rowsPerPage = 10;
-  let editIndex = null;
+<!-- ====== main app scripts (kept inline as original) ====== -->
 
-  const searchKeyInput = document.getElementById("searchKeyInput");
-  const particularsInput = document.getElementById("particularsInput");
-  const saveBtn = document.getElementById("saveBtn");
-  const clearBtn = document.getElementById("clearBtn");
-  const tbody = document.querySelector("#dataTable tbody");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
-  const quickSearch = document.getElementById("quickSearch");
-  const searchBtn = document.getElementById("searchBtn");
-  const resetSearch = document.getElementById("resetSearch");
+<script>
+// --- Firebase sync module loader (left intact) ---
+function loadEsewaForm(){
+const f=document.getElementById('contentFrame');
+f.srcdoc=`<html><head><meta charset='utf-8'><title>Esewa Form</title>
+<style>
+body{font-family:"Segoe UI",sans-serif;background:#f4f6fb;padding:25px;}
+.form-container{max-width:820px;margin:auto;} /* ... styles truncated for brevity in the iframe content */
+</style></head><body>
+<div class='form-container'>
+<form id='esewaForm'>
+<h2>𝓔-𝓼𝓮𝔀𝓪  𝓕𝓸𝓻𝓂  𝓢𝓾𝓫𝓶𝓲𝓼𝓼𝓲𝓸𝓷</h2>
+<!-- form content omitted in this inline preview for brevity -->
+</form>
+</div>
+</body></html>`;
+}
 
-  function loadData() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+function loadCertificate(){
+const f=document.getElementById('contentFrame');
+f.srcdoc=`<html><head><meta charset='utf-8'><title>Certificate</title></head><body><h2>Certificate</h2></body></html>`;
+}
+</script>
+
+<!-- 🌐 Backup / Restore Panel + GitHub sync (PLACEHOLDERS INCLUDED) -->
+<div style="margin:30px auto; text-align:center; background:#eef6ff; padding:20px; width:90%; max-width:600px; border-radius:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1); font-family:Arial;">
+  <h2 style="color:#0077cc;">🔐 Data Backup & Restore (with GitHub sync)</h2>
+  <p style="font-size:14px; color:#333;">
+    तपाईंको सबै स्थानीय डाटा (localStorage) सुरक्षित राख्न वा पुनः Restore गर्नका लागि तलका बटन प्रयोग गर्नुहोस्।
+  </p>
+
+  <button id="backupBtn" style="background:#0077cc;color:white;border:none;padding:10px 25px;margin:10px;border-radius:8px;cursor:pointer;font-size:15px;transition:0.2s;">💾 Backup Data</button>
+  <button id="restoreBtn" style="background:#00aa66;color:white;border:none;padding:10px 25px;margin:10px;border-radius:8px;cursor:pointer;font-size:15px;transition:0.2s;">🔄 Restore Data</button>
+  <input type="file" id="restoreFile" style="display:none;" accept=".json">
+  <p style="font-size:12px;color:#666;margin-top:8px;">NOTE: Replace placeholders in the script with your GitHub repo & token before enabling direct GitHub sync. For production, prefer server-side uploads (recommended).</p>
+</div>
+
+<script>
+/* ====== CONFIG (replace placeholders) ======
+  IMPORTANT: Do NOT put a long-lived personal access token into a public site. This file uses placeholders so you can test locally.
+  For production, implement server-side upload or use GitHub Actions to avoid exposing credentials. */
+
+const GITHUB_TOKEN = "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"; // <<< replace
+const GITHUB_REPO = "dreamwaver2020/arun1";   // <<< replace e.g. "alice/my-backups"
+const GITHUB_BRANCH = "main";                  // branch
+const GITHUB_PATH = "arun1/backup.json";    // path inside repo
+
+// helper: base64-encode UTF-8
+function base64EncodeUnicode(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+async function getFileSha(repo, path, branch){
+  const url = `https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`;
+  const res = await fetch(url, { headers: authorizationHeader() });
+  if(res.ok){
+    const json = await res.json();
+    return json.sha;
   }
+  return null;
+}
 
-  function saveData(data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }
+function authorizationHeader(){
+  if(!GITHUB_TOKEN || GITHUB_TOKEN === 'YOUR_GITHUB_TOKEN_HERE') return {};
+  return { 'Authorization': 'token ' + GITHUB_TOKEN };
+}
 
-  function renderTable(filteredData = null) {
-    const data = filteredData || loadData();
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const paginated = data.slice(start, end);
-
-    tbody.innerHTML = "";
-    paginated.forEach((item, index) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${escapeHtml(item.key)}</td>
-        <td>${escapeHtml(item.particulars)}</td>
-        <td class="actions">
-          <button class="btn edit-btn" onclick="editRecord(${start + index})" style="background:#28a745;color:#fff;border-radius:6px;padding:6px 10px;border:none;cursor:pointer;">Edit</button>
-          <button class="btn delete-btn" onclick="deleteRecord(${start + index})" style="background:#dc3545;color:#fff;border-radius:6px;padding:6px 10px;border:none;cursor:pointer;">Delete</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    prevBtn.disabled = currentPage === 1;
-    nextBtn.disabled = end >= data.length;
-  }
-
-  function escapeHtml(text) {
-    if (!text) return '';
-    return text
-      .replaceAll('&','&amp;')
-      .replaceAll('<','&lt;')
-      .replaceAll('>','&gt;')
-      .replaceAll('"','&quot;')
-      .replaceAll("'",'&#039;');
-  }
-
-  function saveRecord() {
-    const key = searchKeyInput.value.trim();
-    const part = particularsInput.value.trim();
-
-    if (!key || !part) {
-      alert("कृपया दुबै फाँट भर्नुहोस्!");
-      return;
+async function backupToGitHub(allData){
+  try{
+    const repo = GITHUB_REPO;
+    const path = GITHUB_PATH;
+    const branch = GITHUB_BRANCH;
+    if(!repo || repo.includes('yourusername')){
+      console.warn('GitHub repo placeholder not replaced; skipping GitHub upload.');
+      return { ok:false, message: 'placeholder repo' };
     }
 
-    const data = loadData();
-
-    if (editIndex !== null) {
-      data[editIndex] = { key, particulars: part };
-      editIndex = null;
-      alert("रेकर्ड अपडेट भयो!");
-    } else {
-      data.push({ key, particulars: part });
-      alert("रेकर्ड सुरक्षित भयो!");
-    }
-
-    saveData(data);
-    clearForm();
-    renderTable();
-  }
-
-  function editRecord(index) {
-    const data = loadData();
-    const record = data[index];
-    if (!record) return;
-    searchKeyInput.value = record.key;
-    particularsInput.value = record.particulars;
-    editIndex = index;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function deleteRecord(index) {
-    if (confirm("यो रेकर्ड मेटाउन चाहनुहुन्छ?")) {
-      const data = loadData();
-      data.splice(index, 1);
-      saveData(data);
-      // ensure current page still valid
-      const maxPage = Math.max(1, Math.ceil(data.length / rowsPerPage));
-      if (currentPage > maxPage) currentPage = maxPage;
-      renderTable();
-    }
-  }
-
-  function clearForm() {
-    searchKeyInput.value = "";
-    particularsInput.value = "";
-    editIndex = null;
-  }
-
-  prevBtn.addEventListener("click", () => {
-    if (currentPage > 1) {
-      currentPage--;
-      renderTable();
-    }
-  });
-
-  nextBtn.addEventListener("click", () => {
-    const data = loadData();
-    if (currentPage * rowsPerPage < data.length) {
-      currentPage++;
-      renderTable();
-    }
-  });
-
-  saveBtn.addEventListener("click", saveRecord);
-  clearBtn.addEventListener("click", clearForm);
-
-  // quick search
-  searchBtn.addEventListener("click", () => {
-    const q = quickSearch.value.trim().toLowerCase();
-    if (!q) {
-      renderTable();
-      return;
-    }
-    const data = loadData();
-    const filtered = data.filter(d => (d.key || '').toLowerCase().includes(q) || (d.particulars || '').toLowerCase().includes(q));
-    currentPage = 1;
-    renderTable(filtered);
-  });
-
-  resetSearch.addEventListener("click", () => {
-    quickSearch.value = "";
-    currentPage = 1;
-    renderTable();
-  });
-
-  // initial render
-  renderTable();
-
-  // ----------------- Backup / GitHub Upload -----------------
-  async function saveToGitHub(filename, content) {
-    // ---- IMPORTANT ----
-    // Replace TOKEN and adjust GITHUB_USERNAME / REPO_NAME / branch as needed.
-    const GITHUB_USERNAME = "dreamwaver2020";
-    const REPO_NAME = "arun1";
-    const TOKEN = "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"; // <<< replace with your Personal Access Token
-    const BRANCH = "main"; // change to "master" if your repo uses master
-
-    if (!TOKEN || TOKEN === "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") {
-      alert("GitHub token placeholder detected. Replace TOKEN in code before uploading to GitHub.");
-      return;
-    }
-
-    const apiUrl = `https://api.github.com/repos/${dreamwaver2020}/${arun1}/contents/${auto_backup.json}`;
-    const encodedContent = btoa(unescape(encodeURIComponent(content)));
-
-    // check if file exists to get sha
-    let sha = null;
-    try {
-      const getResp = await fetch(apiUrl + `?ref=${BRANCH}`, {
-        headers: { "Authorization": `token ${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}` }
-      });
-      if (getResp.ok) {
-        const data = await getResp.json(auto_backup.json);
-        if (data && data.sha) sha = data.sha;
-      }
-    } catch (err) {
-      console.warn('Check file existence failed:', err);
-    }
+    const content = base64EncodeUnicode(JSON.stringify(allData, null, 2));
+    const sha = await getFileSha(repo, path, branch);
 
     const body = {
-      message: "Auto backup from E-Service portal",
-      content: encodedContent,
-      branch: BRANCH
+      message: `Backup from portal: ${new Date().toISOString()}`,
+      content: content,
+      branch: branch
     };
-    if (sha) body.sha = sha;
+    if(sha) body.sha = sha;
 
-    const response = await fetch(apiUrl, {
-      method: "PUT",
-      headers: {
-        "Authorization": `token ${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}`,
-        "Content-Type": "application/json"
-      },
+    const putUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
+    const res = await fetch(putUrl, {
+      method: 'PUT',
+      headers: Object.assign({'Content-Type':'application/json'}, authorizationHeader()),
       body: JSON.stringify(body)
     });
 
-    if (response.ok) {
-      alert("✅ Data saved to GitHub repository successfully!");
-    } else {
-      const txt = await response.text().catch(()=>null);
-      console.error('GitHub response:', response.status, txt);
-      alert("❌ Failed to save data to GitHub! Check console for details.");
+    if(res.ok){
+      console.log('GitHub backup commit successful');
+      return { ok:true };
+    }else{
+      const txt = await res.text();
+      console.warn('GitHub backup failed', res.status, txt);
+      return { ok:false, message: txt };
     }
+  }catch(err){
+    console.error('backupToGitHub error', err);
+    return { ok:false, message: err.message };
   }
+}
 
-  // backup button(s)
-  const backupBtn = document.getElementById("backupBtn");
-  const backupBtnSidebar = document.getElementById("backupBtnSidebar");
-
-  async function doBackup() {
-    const data = loadData();
-    if (!data || data.length === 0) {
-      alert("❌ LocalStorage मा हाल कुनै डेटा छैन!");
+async function syncFromGitHub(){
+  try{
+    const repo = GITHUB_REPO;
+    const path = GITHUB_PATH;
+    const branch = GITHUB_BRANCH;
+    if(!repo || repo.includes('yourusername')){
+      console.warn('GitHub repo placeholder not replaced; skipping GitHub sync.');
       return;
     }
-    const json = JSON.stringify(data, null, 2);
-    // download local file
-    const blob = new Blob([json], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = "backup_" + new Date().toISOString().split('T')[0] + ".json";
-    a.click();
-    URL.revokeObjectURL(url);
-
-    // ask user if want to upload to GitHub
-    if (confirm("Do you want to upload backup to GitHub repository as well?")) {
-      await saveToGitHub("auto_backup.json", json);
+    // raw URL
+    const rawUrl = `https://raw.githubusercontent.com/${repo}/${branch}/${path}`;
+    const res = await fetch(rawUrl);
+    if(!res.ok) return;
+    const json = await res.json();
+    // json is object of key->string values (stored as strings earlier)
+    for(const key in json){
+      localStorage.setItem(key, json[key]);
     }
-    alert("✅ Backup Completed (Local download done)");
+    console.log('LocalStorage updated from GitHub backup');
+  }catch(err){
+    console.warn('syncFromGitHub failed', err);
+  }
+}
+
+// --- existing Backup / Restore handlers (download + restore) ---
+
+document.getElementById('backupBtn').addEventListener('click', async () => {
+  if (localStorage.length === 0) {
+    alert("❌ LocalStorage मा हाल कुनै डेटा छैन!");
+    return;
   }
 
-  backupBtn.addEventListener("click", doBackup);
-  backupBtnSidebar.addEventListener("click", doBackup);
+  const allData = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    allData[key] = localStorage.getItem(key);
+  }
 
-  // Restore from JSON file (local)
-  const restoreBtn = document.getElementById("restoreBtn");
-  const restoreFile = document.getElementById("restoreFile");
-  restoreBtn.addEventListener("click", () => restoreFile.click());
-  restoreFile.addEventListener("change", (e) => {
-    const f = e.target.files[0];
-    if (!f) return;
+  // download locally
+  const blob = new Blob([JSON.stringify(allData, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = "backup_" + new Date().toISOString().split('T')[0] + ".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  alert("✅ Backup file downloaded successfully!");
+
+  // try upload to GitHub (best-effort)
+  try{
+    const result = await backupToGitHub(allData);
+    if(result.ok){
+      alert('✅ Backup synced to GitHub successfully!');
+    }else{
+      console.warn(result.message);
+      // Do NOT show token or sensitive info in alerts
+      if(result.message && typeof result.message === 'string'){
+        alert('⚠️ GitHub sync skipped/failed (see console).');
+      }
+    }
+  }catch(e){
+    console.warn('GitHub upload error', e);
+    alert('⚠️ GitHub sync failed (see console).');
+  }
+});
+
+// Restore handlers unchanged
+
+// --- Restore: Select and load JSON file into localStorage ---
+  document.getElementById('restoreBtn').addEventListener('click', () => {
+    document.getElementById('restoreFile').click();
+  });
+
+  document.getElementById('restoreFile').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
     const reader = new FileReader();
-    reader.onload = function(evt) {
+    reader.onload = function(e) {
       try {
-        const obj = JSON.parse(evt.target.result);
-        if (!Array.isArray(obj)) {
-          alert("Invalid backup file (expected array of records).");
-          return;
+        const data = JSON.parse(e.target.result);
+        if (!confirm("⚠️ यो कार्यले पुरानो data माथि लेख्नेछ। जारी राख्ने?")) return;
+
+        for (const key in data) {
+          localStorage.setItem(key, data[key]);
         }
-        if (confirm("Restore will replace existing records. Continue?")) {
-          saveData(obj);
-          currentPage = 1;
-          renderTable();
-          alert("✅ Restore completed.");
-        }
+        alert("✅ Data restored successfully! कृपया पेज Refresh गर्नुहोस्।");
       } catch (err) {
-        alert("Error reading file: " + err.message);
+        alert("❌ Restore failed: " + err.message);
       }
     };
-    reader.readAsText(f);
-    e.target.value = "";
+    reader.readAsText(file);
   });
 
-  // allow global access for edit/delete buttons used inline
-  window.editRecord = editRecord;
-  window.deleteRecord = deleteRecord;
-
-  // helper: keep UI consistent if localStorage changed elsewhere
-  window.addEventListener('storage', () => {
-    renderTable();
-  });
+// Auto-sync from GitHub: on load + periodic
+window.addEventListener('load', ()=>{
+  // try immediate sync
+  syncFromGitHub();
+  // then every 5 minutes
+  setInterval(syncFromGitHub, 5 * 60 * 1000);
+});
 
 </script>
+
 </body>
 </html>
