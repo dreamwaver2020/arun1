@@ -89,7 +89,7 @@ async function saveToGitHub(filename, content) {
   const REPO_NAME = "arun1";
   const TOKEN = "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"; // 👉 यहाँ आफ्नो token राख्नुहोस्
 
-  const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${filename}`;
+  const apiUrl = `https://api.github.com/repos/${dreamwaver2020}/${arun1}/contents/${auto_backup.json}`;
   const encodedContent = btoa(unescape(encodeURIComponent(content)));
 
   const response = await fetch(apiUrl, {
