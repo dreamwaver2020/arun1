@@ -3,142 +3,430 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aruns E-Services Portal</title>
+  <title>Aruns E-Services Portal — Data + Search</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:"Segoe UI",Arial,sans-serif;background:#f0f4fb;color:#333;height:100vh;}
+    body{font-family:"Segoe UI",Arial,sans-serif;background:#f0f4fb;color:#333;min-height:100vh;}
     header{background:linear-gradient(90deg,#002b5c,#004b8d);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:8px 20px;}
     header img{height:60px;}
     header .title{text-align:center;flex-grow:1;}
-    header .title h1{font-size:22px;}
-    .container{display:grid;grid-template-columns:250px 1fr;height:calc(100vh - 75px);}
-    .sidebar{background:#e9eff7;border-right:2px solid #c3cbe0;padding:10px;overflow-y:auto;}
+    header .title h1{font-size:20px;margin-bottom:4px;}
+    header .title p{font-size:12px;margin-top:0;color:#cfe7ff;}
+    .layout{display:grid;grid-template-columns:250px 1fr;gap:0;min-height:calc(100vh - 86px);}
+    .sidebar{background:#e9eff7;border-right:2px solid #c3cbe0;padding:12px;overflow-y:auto;}
     .sidebar h3{color:#003366;margin-bottom:10px;}
-    .folder>div{cursor:pointer;padding:6px 10px;border-radius:4px;display:flex;align-items:center;}
-    .folder ul{margin-left:20px;margin-top:5px;list-style:none;display:none;}
-    .folder.open>ul{display:block;}
-    .folder ul li a{text-decoration:none;color:#003366;display:block;padding:4px 8px;border-radius:4px;}
-    .folder ul li a:hover{background:#c7d7f0;}
-    main{background:#fff;}
-    iframe{width:100%;height:100%;border:none;}
-    footer{background:#002b5c;color:#fff;text-align:center;font-size:12px;padding:6px;}
+    .main{padding:18px;background:#fff;}
+    footer{background:#002b5c;color:#fff;text-align:center;font-size:12px;padding:8px;}
     .time-box{
-      display:flex;flex-direction:column;align-items:center;padding:6px 15px;border-radius:12px;
+      display:flex;flex-direction:column;align-items:center;padding:6px 12px;border-radius:10px;
       background:linear-gradient(135deg,#003366,#0077cc);
       border:2px solid #00ffff;
-      box-shadow:0 0 15px rgba(0,255,255,0.5);
-      animation:pulse 3s infinite ease-in-out;
+      box-shadow:0 0 10px rgba(0,255,255,0.15);
     }
-    @keyframes pulse{
-      0%{box-shadow:0 0 10px rgba(0,255,255,0.4);}
-      50%{box-shadow:0 0 25px rgba(0,255,255,0.9);}
-      100%{box-shadow:0 0 10px rgba(0,255,255,0.4);}
-    }
-    .time-box .eng{font-size:15px;color:#aee2ff;}
-    .time-box .nep{font-size:14px;color:#ffea91;font-weight:600;}
+    .time-box .eng{font-size:13px;color:#aee2ff;}
+    .time-box .nep{font-size:12px;color:#ffea91;font-weight:600;}
+    /* form styles */
+    .card{max-width:900px;margin:0 auto;background:#fff;padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06);}
+    label{display:block;margin-top:12px;font-weight:700;color:#124;}
+    input, textarea, select{width:100%;padding:10px;margin-top:6px;border:1px solid #d0d7e6;border-radius:6px;font-size:14px;}
+    textarea{min-height:80px;}
+    .flex-row{display:flex;gap:10px;margin-top:12px;align-items:center;}
+    .btn{padding:10px 16px;border-radius:8px;border:none;cursor:pointer;font-weight:700;}
+    .btn-primary{background:#0077cc;color:#fff;}
+    .btn-danger{background:#dc3545;color:#fff;}
+    .btn-success{background:#28a745;color:#fff;}
+    table{width:100%;border-collapse:collapse;margin-top:16px;}
+    th,td{padding:10px;border:1px solid #e6e9f2;text-align:left;font-size:14px;}
+    th{background:#f4f7fb;}
+    tr:nth-child(even){background:#fbfdff;}
+    .actions button{margin-right:6px;}
+    .search-row{display:flex;gap:8px;align-items:center;}
+    .small{width:140px;}
+    .backup-panel{margin:18px 0;padding:16px;background:#eef6ff;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.04);}
+    .note{font-size:13px;color:#445;}
+    .pagination{display:flex;justify-content:center;gap:8px;margin-top:12px;}
+    .pagination button{padding:8px 12px;border-radius:6px;border:none;background:#0077cc;color:#fff;cursor:pointer;}
+    .pagination button:disabled{background:#c7d7e7;cursor:not-allowed;}
   </style>
 </head>
 <body>
 
-<!-- ✅ सीधा Main Page -->
-<div id="mainPage">
-  <header>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Animated-nepal-flag-image-0007.gif" alt="Nepal Flag">
-      <div class="time-box">
-        <div class="eng" id="engTime">Loading...</div>
-        <div class="nep" id="nepTime">नेपाली मिति...</div>
+<header>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Animated-nepal-flag-image-0007.gif" alt="Nepal Flag">
+    <div class="time-box">
+      <div class="eng" id="engTime">Loading...</div>
+      <div class="nep" id="nepTime">नेपाली मिति...</div>
+    </div>
+  </div>
+
+  <div class="title">
+    <h1>Aruns E-Services Portal</h1>
+    <p>Database With Cloud Department — Government of Nepal</p>
+  </div>
+
+  <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Small_gif.gif" alt="Logo" style="height:42px;">
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <h3>Menu</h3>
+    <div style="margin-bottom:10px;">
+      <button class="btn btn-primary" onclick="document.getElementById('entry').scrollIntoView({behavior:'smooth'})">Data Entry</button>
+    </div>
+    <div style="margin-bottom:10px;">
+      <button class="btn" onclick="document.getElementById('records').scrollIntoView({behavior:'smooth'})">Saved Records</button>
+    </div>
+
+    <div style="margin-top:20px;">
+      <h4 style="color:#003366;margin-bottom:8px;">Backup</h4>
+      <div class="note">Local JSON download + upload to GitHub (replace token & repo in script)</div>
+      <div style="margin-top:8px;">
+        <button id="backupBtnSidebar" class="btn btn-primary">💾 Backup Now</button>
       </div>
     </div>
-    <div class="title">
-      <h1> ⲯ﹍︿﹍︿﹍ 𝓦𝓮𝓵𝓬𝓸𝓶𝓮 ﹍ⲯ﹍ⲯ﹍︿﹍☼ </h1>
-      <p> 𝐃𝐚𝐭𝐚𝐛𝐚𝐬𝐞 𝐖𝐢𝐭𝐡 𝐂𝐥𝐨𝐮𝐝 𝐃𝐞𝐩𝐚𝐫𝐭𝐦𝐞𝐧𝐭, 𝐆𝐨𝐯𝐞𝐫𝐧𝐦𝐞𝐧𝐭 𝐨𝐟 𝐍𝐞𝐩𝐚𝐥</p>
-    </div>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Small_gif.gif" alt="Logo">
-  </header>
+  </aside>
 
-  <div class="container">
-    <div class="sidebar">
-      <h3>𝐎𝐧𝐥𝐢𝐧𝐞 𝐄-𝐒𝐞𝐫𝐯𝐢𝐜𝐞𝐬</h3>
-      <!-- Sidebar folders/content यहाँ राख्नुहोस् -->
+  <main class="main">
+    <div class="card" id="entry">
+      <h2 style="margin-bottom:8px;">Data Entry & Search</h2>
+
+      <label for="searchKeyInput">Search Key (for saving / searching)</label>
+      <input type="text" id="searchKeyInput" placeholder="जस्तै: Deposit, Withdraw, Expense...">
+
+      <label for="particularsInput">Particulars</label>
+      <textarea id="particularsInput" placeholder="विवरण लेख्नुहोस्..."></textarea>
+
+      <div class="flex-row">
+        <button id="saveBtn" class="btn btn-primary">💾 Save</button>
+        <button id="clearBtn" class="btn">Clear Form</button>
+        <div style="flex:1"></div>
+
+        <input type="text" id="quickSearch" placeholder="Search records by key..." style="padding:8px;border-radius:6px;border:1px solid #d0d7e6;">
+        <button id="searchBtn" class="btn btn-success">🔍 Search</button>
+        <button id="resetSearch" class="btn">Reset</button>
+      </div>
+
+      <div class="backup-panel" style="margin-top:14px;">
+        <h3 style="margin:0 0 8px 0;color:#0077cc;">🔐 Data Backup & Restore</h3>
+        <div class="note">Click Backup to download local JSON and optionally upload to GitHub repository.</div>
+        <div style="margin-top:10px;">
+          <button id="backupBtn" class="btn btn-primary">💾 Backup Data</button>
+          <button id="restoreBtn" class="btn">⤺ Restore From File</button>
+          <input type="file" id="restoreFile" accept=".json" style="display:none;">
+        </div>
+      </div>
     </div>
-    <main><iframe name="contentFrame" id="contentFrame"></iframe></main>
-  </div>
-  <footer>© 2025 Database With Cloud Department, Government of Nepal</footer>
+
+    <div class="card" id="records" style="margin-top:18px;">
+      <h3>Saved Records</h3>
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th style="width:18%;">Search Key</th>
+            <th>Particulars</th>
+            <th style="width:18%;">Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="pagination" style="margin-bottom:6px;">
+        <button id="prevBtn">Previous</button>
+        <button id="nextBtn">Next</button>
+      </div>
+    </div>
+  </main>
 </div>
 
-<!-- 🔐 Data Backup Panel (जस्ताको तस्तै रह्यो) -->
-<div style="margin:30px auto; text-align:center; background:#eef6ff; padding:20px; width:90%; max-width:600px; border-radius:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1); font-family:Arial;">
-  <h2 style="color:#0077cc;">🔐 Data Backup & Restore</h2>
-  <button id="backupBtn" style="background:#0077cc;color:white;border:none;padding:10px 25px;margin:10px;border-radius:8px;cursor:pointer;font-size:15px;">💾 Backup Data</button>
-</div>
+<footer>© 2025 Database With Cloud Department, Government of Nepal</footer>
 
 <script>
-// ✅ समय देखाउने Function
-function updateTime(){
-  const now = new Date();
-  document.getElementById('engTime').textContent = now.toLocaleString('en-GB');
-  document.getElementById('nepTime').textContent = 'नेपाली मिति अपडेट हुँदैछ...';
-}
-setInterval(updateTime,1000);
-updateTime();
+  // ----------------- Time display -----------------
+  function updateTime(){
+    const now = new Date();
+    document.getElementById('engTime').textContent = now.toLocaleString('en-GB');
+    document.getElementById('nepTime').textContent = 'नेपाली मिति अपडेट हुँदैछ...';
+  }
+  setInterval(updateTime,1000);
+  updateTime();
 
-// ✅ GitHub मा डेटा पठाउने function
-async function saveToGitHub(filename, content) {
-  const GITHUB_USERNAME = "dreamwaver2020";
-  const REPO_NAME = "arun1";
-  const TOKEN = "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"; // 👉 यहाँ आफ्नो token राख्नुहोस्
+  // ----------------- LocalStorage Data logic -----------------
+  const STORAGE_KEY = "simple_data_records";
+  let currentPage = 1;
+  const rowsPerPage = 10;
+  let editIndex = null;
 
-  const apiUrl = `https://api.github.com/repos/${dreamwaver2020}/${arun1}/contents/${auto_backup.json}`;
-  const encodedContent = btoa(unescape(encodeURIComponent(content)));
+  const searchKeyInput = document.getElementById("searchKeyInput");
+  const particularsInput = document.getElementById("particularsInput");
+  const saveBtn = document.getElementById("saveBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const tbody = document.querySelector("#dataTable tbody");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const quickSearch = document.getElementById("quickSearch");
+  const searchBtn = document.getElementById("searchBtn");
+  const resetSearch = document.getElementById("resetSearch");
 
-  const response = await fetch(apiUrl, {
-    method: "PUT",
-    headers: {
-      "Authorization": `token ${TOKEN}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      message: "Auto backup from E-Service portal",
-      content: encodedContent
-    })
+  function loadData() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  }
+
+  function saveData(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function renderTable(filteredData = null) {
+    const data = filteredData || loadData();
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginated = data.slice(start, end);
+
+    tbody.innerHTML = "";
+    paginated.forEach((item, index) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${escapeHtml(item.key)}</td>
+        <td>${escapeHtml(item.particulars)}</td>
+        <td class="actions">
+          <button class="btn edit-btn" onclick="editRecord(${start + index})" style="background:#28a745;color:#fff;border-radius:6px;padding:6px 10px;border:none;cursor:pointer;">Edit</button>
+          <button class="btn delete-btn" onclick="deleteRecord(${start + index})" style="background:#dc3545;color:#fff;border-radius:6px;padding:6px 10px;border:none;cursor:pointer;">Delete</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = end >= data.length;
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return text
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'",'&#039;');
+  }
+
+  function saveRecord() {
+    const key = searchKeyInput.value.trim();
+    const part = particularsInput.value.trim();
+
+    if (!key || !part) {
+      alert("कृपया दुबै फाँट भर्नुहोस्!");
+      return;
+    }
+
+    const data = loadData();
+
+    if (editIndex !== null) {
+      data[editIndex] = { key, particulars: part };
+      editIndex = null;
+      alert("रेकर्ड अपडेट भयो!");
+    } else {
+      data.push({ key, particulars: part });
+      alert("रेकर्ड सुरक्षित भयो!");
+    }
+
+    saveData(data);
+    clearForm();
+    renderTable();
+  }
+
+  function editRecord(index) {
+    const data = loadData();
+    const record = data[index];
+    if (!record) return;
+    searchKeyInput.value = record.key;
+    particularsInput.value = record.particulars;
+    editIndex = index;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function deleteRecord(index) {
+    if (confirm("यो रेकर्ड मेटाउन चाहनुहुन्छ?")) {
+      const data = loadData();
+      data.splice(index, 1);
+      saveData(data);
+      // ensure current page still valid
+      const maxPage = Math.max(1, Math.ceil(data.length / rowsPerPage));
+      if (currentPage > maxPage) currentPage = maxPage;
+      renderTable();
+    }
+  }
+
+  function clearForm() {
+    searchKeyInput.value = "";
+    particularsInput.value = "";
+    editIndex = null;
+  }
+
+  prevBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderTable();
+    }
   });
 
-  if (response.ok) {
-    alert("✅ Data saved to GitHub repository successfully!");
-  } else {
-    alert("❌ Failed to save data to GitHub!");
+  nextBtn.addEventListener("click", () => {
+    const data = loadData();
+    if (currentPage * rowsPerPage < data.length) {
+      currentPage++;
+      renderTable();
+    }
+  });
+
+  saveBtn.addEventListener("click", saveRecord);
+  clearBtn.addEventListener("click", clearForm);
+
+  // quick search
+  searchBtn.addEventListener("click", () => {
+    const q = quickSearch.value.trim().toLowerCase();
+    if (!q) {
+      renderTable();
+      return;
+    }
+    const data = loadData();
+    const filtered = data.filter(d => (d.key || '').toLowerCase().includes(q) || (d.particulars || '').toLowerCase().includes(q));
+    currentPage = 1;
+    renderTable(filtered);
+  });
+
+  resetSearch.addEventListener("click", () => {
+    quickSearch.value = "";
+    currentPage = 1;
+    renderTable();
+  });
+
+  // initial render
+  renderTable();
+
+  // ----------------- Backup / GitHub Upload -----------------
+  async function saveToGitHub(filename, content) {
+    // ---- IMPORTANT ----
+    // Replace TOKEN and adjust GITHUB_USERNAME / REPO_NAME / branch as needed.
+    const GITHUB_USERNAME = "dreamwaver2020";
+    const REPO_NAME = "arun1";
+    const TOKEN = "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"; // <<< replace with your Personal Access Token
+    const BRANCH = "main"; // change to "master" if your repo uses master
+
+    if (!TOKEN || TOKEN === "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") {
+      alert("GitHub token placeholder detected. Replace TOKEN in code before uploading to GitHub.");
+      return;
+    }
+
+    const apiUrl = `https://api.github.com/repos/${dreamwaver2020}/${arun1}/contents/${auto_backup.json}`;
+    const encodedContent = btoa(unescape(encodeURIComponent(content)));
+
+    // check if file exists to get sha
+    let sha = null;
+    try {
+      const getResp = await fetch(apiUrl + `?ref=${BRANCH}`, {
+        headers: { "Authorization": `token ${TOKEN}` }
+      });
+      if (getResp.ok) {
+        const data = await getResp.json();
+        if (data && data.sha) sha = data.sha;
+      }
+    } catch (err) {
+      console.warn('Check file existence failed:', err);
+    }
+
+    const body = {
+      message: "Auto backup from E-Service portal",
+      content: encodedContent,
+      branch: BRANCH
+    };
+    if (sha) body.sha = sha;
+
+    const response = await fetch(apiUrl, {
+      method: "PUT",
+      headers: {
+        "Authorization": `token ${TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (response.ok) {
+      alert("✅ Data saved to GitHub repository successfully!");
+    } else {
+      const txt = await response.text().catch(()=>null);
+      console.error('GitHub response:', response.status, txt);
+      alert("❌ Failed to save data to GitHub! Check console for details.");
+    }
   }
-}
 
-// ✅ Backup button event
-document.getElementById('backupBtn').addEventListener('click', async () => {
-  if (localStorage.length === 0) {
-    alert("❌ LocalStorage मा हाल कुनै डेटा छैन!");
-    return;
+  // backup button(s)
+  const backupBtn = document.getElementById("backupBtn");
+  const backupBtnSidebar = document.getElementById("backupBtnSidebar");
+
+  async function doBackup() {
+    const data = loadData();
+    if (!data || data.length === 0) {
+      alert("❌ LocalStorage मा हाल कुनै डेटा छैन!");
+      return;
+    }
+    const json = JSON.stringify(data, null, 2);
+    // download local file
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "backup_" + new Date().toISOString().split('T')[0] + ".json";
+    a.click();
+    URL.revokeObjectURL(url);
+
+    // ask user if want to upload to GitHub
+    if (confirm("Do you want to upload backup to GitHub repository as well?")) {
+      await saveToGitHub("auto_backup.json", json);
+    }
+    alert("✅ Backup Completed (Local download done)");
   }
 
-  const allData = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    allData[key] = localStorage.getItem(key);
-  }
+  backupBtn.addEventListener("click", doBackup);
+  backupBtnSidebar.addEventListener("click", doBackup);
 
-  // स्थानीय JSON डाउनलोड
-  const blob = new Blob([JSON.stringify(allData, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = "backup_" + new Date().toISOString().split('T')[0] + ".json";
-  a.click();
-  URL.revokeObjectURL(url);
+  // Restore from JSON file (local)
+  const restoreBtn = document.getElementById("restoreBtn");
+  const restoreFile = document.getElementById("restoreFile");
+  restoreBtn.addEventListener("click", () => restoreFile.click());
+  restoreFile.addEventListener("change", (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      try {
+        const obj = JSON.parse(evt.target.result);
+        if (!Array.isArray(obj)) {
+          alert("Invalid backup file (expected array of records).");
+          return;
+        }
+        if (confirm("Restore will replace existing records. Continue?")) {
+          saveData(obj);
+          currentPage = 1;
+          renderTable();
+          alert("✅ Restore completed.");
+        }
+      } catch (err) {
+        alert("Error reading file: " + err.message);
+      }
+    };
+    reader.readAsText(f);
+    e.target.value = "";
+  });
 
-  // GitHub मा अपलोड
-  await saveToGitHub("auto_backup.json", JSON.stringify(allData, null, 2));
+  // allow global access for edit/delete buttons used inline
+  window.editRecord = editRecord;
+  window.deleteRecord = deleteRecord;
 
-  alert("✅ Backup Completed (Local + GitHub)");
-});
+  // helper: keep UI consistent if localStorage changed elsewhere
+  window.addEventListener('storage', () => {
+    renderTable();
+  });
+
 </script>
-
 </body>
 </html>
